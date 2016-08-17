@@ -4,11 +4,12 @@
 #include "robot.h"
 #include "amb/utils.h"
 #include "geometry.h"
+#include "ball.h"
+
+using namespace std;
+using namespace util;
 
 int main() {
-    using namespace std;
-    using namespace util;
-
     cin.sync_with_stdio(false);
     cout.sync_with_stdio(false);
     cerr.sync_with_stdio(false);
@@ -66,6 +67,7 @@ int main() {
         float referee_time_left;
         int score_player, score_opponent;
         int goalie_id_player, goalie_id_opponent;
+        cerr << referee_state << endl;
 
         cin >> counter
             >> timestamp
@@ -76,7 +78,8 @@ int main() {
         float ball_x, ball_y, ball_vx, ball_vy;
 
         cin >> ball_x >> ball_y >> ball_vx >> ball_vy;
-
+        Ball ball(Pose (ball_x, ball_y, 0.0f) , Pose(ball_vx, ball_vy, 0.0f));
+        
         int robot_count_player;
         cin >> robot_count_player;
 
@@ -129,7 +132,6 @@ int main() {
             }
 
             cout << v_tangent << " " << v_normal << " " << v_angular << " " << kick_force << " " << chip_force << " " << dribble << endl;
-            cerr << field_geom.field_width_ << endl;
         }
     }
 }
