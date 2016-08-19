@@ -6,6 +6,8 @@
 #include "geometry.h"
 #include "ball.h"
 
+#include "command.h"
+
 using namespace std;
 using namespace util;
 
@@ -61,12 +63,13 @@ int main() {
 
         // Input
 
-        int counter;
-        float timestamp;
-        char referee_state;
-        float referee_time_left;
-        int score_player, score_opponent;
-        int goalie_id_player, goalie_id_opponent;
+        int         counter;
+        float       timestamp;
+        char        referee_state;
+        float       referee_time_left;
+        int         score_player, score_opponent;
+        int         goalie_id_player, goalie_id_opponent;
+        
         cerr << referee_state << endl;
 
         cin >> counter
@@ -113,13 +116,13 @@ int main() {
         cout << counter << endl;
 
         for (int i = 0; i < ids.size() ; ++i) {
-            const int robot_id = ids[i];
-            float v_tangent = 0.0f;
-            float v_normal = 0.0f;
-            float v_angular = 0.0f;
-            float kick_force = 0.0f;
-            float chip_force = 0.0f;
-            bool dribble = false;
+            const int   robot_id = ids[i];
+            float       v_tangent = 0.0f;
+            float       v_normal = 0.0f;
+            float       v_angular = 0.0f;
+            float       kick_force = 0.0f;
+            float       chip_force = 0.0f;
+            bool        dribble = false;
 
             if (robot_id == 0) {
                 const float PL = 1.50f;
@@ -135,3 +138,4 @@ int main() {
         }
     }
 }
+
