@@ -12,9 +12,9 @@ float util::wrap(const float ang) {
     return (fmod(ang + 5 * PI, 2 * PI) - PI);
 }
 
-float util::dist(const Pose p1, const Pose p2) {
-    const float dx_2 = (p1.x_-p2.x_)*(p1.x_-p2.x_);
-    const float dy_2 = (p1.y_-p2.y_)*(p1.y_-p2.y_);
+float util::dist(const Vec3 pose1, const Vec3 pose2) {
+    const float dx_2 = (pose1.x_-pose2.x_)*(pose1.x_-pose2.x_);
+    const float dy_2 = (pose1.y_-pose2.y_)*(pose1.y_-pose2.y_);
     return sqrt(dx_2+dy_2);
 }
 

@@ -2,11 +2,13 @@
 #include <vector>
 
 #include "robot.h"
-#include "amb/utils.h"
-#include "geometry.h"
-#include "ball.h"
 
-#include "command.h"
+#include "env/utils.h"
+#include "env/ssl_geometry.h"
+#include "env/ball.h"
+
+#include "ctrl/command.h"
+#include "ctrl/pid.h"
 
 using namespace std;
 using namespace util;
@@ -31,7 +33,6 @@ int main() {
         return 0;
     }
     cerr << "compatible" << endl;
-
     // Geometry input
 
     float field_length;
@@ -53,14 +54,11 @@ int main() {
     // Game state I/O
 
     while (true) {
-
         // State
-
  
         vector<int> ids;
         float x = 0.0f, y = 0.0f, w = 0.0f;
         float tx = 0.0f, ty = 0.0f, tw = 0.0f;
-
         // Input
 
         int         counter;
@@ -70,8 +68,6 @@ int main() {
         int         score_player, score_opponent;
         int         goalie_id_player, goalie_id_opponent;
         
-        cerr << referee_state << endl;
-
         cin >> counter
             >> timestamp
             >> referee_state >> referee_time_left
@@ -81,17 +77,18 @@ int main() {
         float ball_x, ball_y, ball_vx, ball_vy;
 
         cin >> ball_x >> ball_y >> ball_vx >> ball_vy;
-        Ball ball(Pose (ball_x, ball_y, 0.0f) , Pose(ball_vx, ball_vy, 0.0f));
+        Ball ball(Vec3 (ball_x, ball_y, 0.0f) , Vec3(ball_vx, ball_vy, 0.0f));
         
         int robot_count_player;
         cin >> robot_count_player;
-
+        vector<Robot> our_robots;
         for (int i = 0; i < robot_count_player; ++i) {
             int robot_id;
             float robot_x, robot_y, robot_w, robot_vx, robot_vy, robot_vw;
 
             cin >> robot_id >> robot_x >> robot_y >> robot_w >> robot_vx >> robot_vy >> robot_vw;
             ids.push_back(robot_id);
+            our_robots.push_back(Robot(Vec3(robot_x,robot_y,robot_w), Vec3(robot_vx, robot_vy, robot_vw), robot_id));
             if (robot_id == 0) {
                 x = robot_x;
                 y = robot_y;
@@ -101,12 +98,13 @@ int main() {
 
         int robot_count_opponent;
         cin >> robot_count_opponent;
-
+        vector<Robot> their_robots;
         for (int i = 0; i < robot_count_opponent; ++i) {
             int robot_id;
             float robot_x, robot_y, robot_w, robot_vx, robot_vy, robot_vw;
 
             cin >> robot_id >> robot_x >> robot_y >> robot_w >> robot_vx >> robot_vy >> robot_vw;
+            their_robots.push_back(Robot(Vec3(robot_x,robot_y,robot_w), Vec3(robot_vx, robot_vy, robot_vw), robot_id));
         }
 
         tx = ball_x;
@@ -123,19 +121,17 @@ int main() {
             float       kick_force = 0.0f;
             float       chip_force = 0.0f;
             bool        dribble = false;
+            Command cmd(v_tangent, v_normal, v_angular, kick_force, chip_force, dribble);
 
             if (robot_id == 0) {
-                const float PL = 1.50f;
-                const float PW = 1.80f;
-                v_tangent  = PL * ((tx - x) * cos(w) + (ty - y) * sin(w));
-                v_normal = PL * ((ty - y) * cos(w) + (tx - x) * sin(w));
-                v_angular  = PW * wrap ((tw - w));
-                kick_force = 7.0f;
-                dribble = false;
+                PID pid(cmd);
+                pid.calcProportional( Vec3(x,y,w), Vec3( tx,ty,wrap( -atan( y/(field_geom.field_length_ - x) )) ));
+                cmd.kick_ = 7.0f;
+                cmd.dribble_ = false;
             }
-
-            cout << v_tangent << " " << v_normal << " " << v_angular << " " << kick_force << " " << chip_force << " " << dribble << endl;
-        }
+        cerr << x << " , " << y << " , " << w << endl;  
+        cmd.print();
+        }        
     }
 }
 
