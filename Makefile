@@ -1,21 +1,21 @@
 MAIN = nu-intel
-FLAGS = 
+CLIFLAGS = 
+GUIFLAGS = 
 CXX = clang++-3.5 -std=c++11
 SRC := $(shell find -name '*.cpp')
-OBJS := $(SRC:.cpp=.o)
-VPATH = amb:aa
+VPATH = amb
 
-$(OBJS): $(SRC) 
+*.o: $(SRC) 
 	$(CXX) -c $(SRC)
+
+$(MAIN): *.o
 	$(CXX) *.o -o $(MAIN)
 
-gui:
-	roboime-next-gui ./$(MAIN)
+gui: $(MAIN)
+	roboime-next-gui $(GUIFLAGS) ./$(MAIN)
 
-cli:
-	roboime-next-cli ./$(MAIN) 
-
+cli: $(MAIN)
+	roboime-next-cli $(CLIFLAGS) ./$(MAIN) 
 clean:
-		rm -f $(MAIN) *.o
+	rm -f $(MAIN) *.o
 
-#TODO: Optmize makefile 
