@@ -2,9 +2,11 @@
 #include <vector>
 
 #include "robot.h"
+#include "intel.h"
 
 #include "env/utils.h"
 #include "env/ssl_geometry.h"
+#include "env/state.h"
 #include "env/ball.h"
 
 #include "ctrl/command.h"
@@ -33,6 +35,7 @@ int main() {
         return 0;
     }
     cerr << "compatible" << endl;
+    Intel intel;
     // Geometry input
 
     float field_length;
@@ -50,7 +53,7 @@ int main() {
         >> defense_stretch;
 
     cerr << "initialized" << endl;
-    Geometry field_geom(field_length, field_width, goal_width, center_circle_radius, defense_radius, defense_stretch);
+    intel.setGeometry(Geometry(field_length, field_width, goal_width, center_circle_radius, defense_radius, defense_stretch));
     // Game state I/O
 
     while (true) {
@@ -73,6 +76,7 @@ int main() {
             >> referee_state >> referee_time_left
             >> score_player >> score_opponent
             >> goalie_id_player >> goalie_id_opponent;
+        intel.setState( State(counter, timestamp, referee_state, referee_time_left, score_player, score_opponent, goalie_id_player, goalie_id_opponent) );
 
         float ball_x, ball_y, ball_vx, ball_vy;
 
@@ -125,7 +129,7 @@ int main() {
 
             if (robot_id == 0) {
                 PID pid(cmd);
-                pid.calcProportional( Vec3(x,y,w), Vec3( tx,ty,wrap( -atan( y/(field_geom.field_length_ - x) )) ));
+                pid.calcProportional( Vec3(x,y,w), Vec3( tx,ty,wrap( -atan( y/(intel.getGeometry().field_length_ - x) )) ));
                 cmd.kick_ = 7.0f;
                 cmd.dribble_ = false;
             }

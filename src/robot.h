@@ -6,21 +6,25 @@
 
 class Robot{
 public:
-    Robot();
+    Robot() = default;
 	Robot( Vec3 pose, Vec3 vel, int id );
+    ~Robot() = default;
 
  	int getId() const { return id_; }
 	Vec3 getPose() const { return pose_; }
     Vec3 getVel() const { return vel_;  }
+    bool isFriend() const { return is_friend;  }
 
 	void setId();
 	void setPose();
     void setInput( Vec3 pose, Vec3 vel, int id );
 
 private:
-	int id_;
+    int id_;
+    bool is_friend;
+    bool close_to_ball; // TODO: has ball algorithm
     PID pid_;
     Command cmd_;
-    Vec3 pose_,vel_; 
+    Vec3 pose_,vel_;
 	Robot* robots_allies_;
 };

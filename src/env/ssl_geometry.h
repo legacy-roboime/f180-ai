@@ -8,6 +8,7 @@ struct Geometry{
    float defense_radius_;
    float defense_stretch_;
 
+   Geometry() = default;
    Geometry(float p1, float p2, float p3, float p4, float p5, float p6):
    field_length_(p1),
    field_width_(p2),
