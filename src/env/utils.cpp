@@ -18,3 +18,6 @@ float util::dist(const Vec3 pose1, const Vec3 pose2) {
     return sqrt(dx_2+dy_2);
 }
 
+float util::aim(const Vec3 shooter, const Vec3 target){
+   return wrap(atan((shooter.y_ - target.y_) / (shooter.x_ - target.x_)));
+}
