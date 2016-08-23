@@ -1,5 +1,6 @@
 TODO
 ----
 
-[ ] Geometry input error fix
-[ ] Enhance Makefile
+[ x ] Geometry input error fix
+[ x ] Enhance Makefile
+[ ] Solve the "it goes crazy when not aiming goal" bug

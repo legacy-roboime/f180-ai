@@ -109,6 +109,7 @@ void Intel::loop(){
             cmd.dribble_ = false;
         }
         cmd.print();
+        cmd.printerr();
         }        
     }
 }
