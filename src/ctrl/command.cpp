@@ -26,5 +26,5 @@ void Command::print(){
 }
 
 void Command::printerr(){
-    cerr <<"vt: " << vt_ << "vn: " << vn_ << "vw: " << vw_ << "kick: " << kick_ << "chip: " << chip_ << "dribble? " << dribble_ << endl;
+    cerr <<"vt: " << vt_ << " vn: " << vn_ << " vw: " << vw_ << " kick: " << kick_ << " chip: " << chip_ << " dribble? " << dribble_ << endl;
 }

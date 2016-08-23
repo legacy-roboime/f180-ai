@@ -7,7 +7,7 @@
 class Robot{
 public:
     Robot() = default;
-	Robot( Vec3 pose, Vec3 vel, int id, bool is_friend_);
+	Robot( Vec3 pose, Vec3 vel, int id, bool is_friend_ );
     ~Robot() = default;
 
  	int getId() const { return id_; }

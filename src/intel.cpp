@@ -104,7 +104,7 @@ void Intel::loop(){
 
         if (robot_id == 0) {
             PID pid(cmd);
-            pid.calcProportional( Vec3(x,y,w), Vec3( tx,ty,util::wrap( -atan( y/(ssl_geometry_.field_length_ - x)))));
+            pid.calcProportional( Vec3(x,y,w), Vec3( tx,ty,util::aim(Vec3(x,y,w) , Vec3(ssl_geometry_.field_length_, 0.0f, 0.0f))));
             cmd.kick_ = 7.0f;
             cmd.dribble_ = false;
         }
