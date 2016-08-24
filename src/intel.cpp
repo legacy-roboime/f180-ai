@@ -103,7 +103,7 @@ void Intel::loop(){
         Command cmd(v_tangent, v_normal, v_angular, kick_force, chip_force, dribble);
 
         if (robot_id == 0) {
-            const float aim = util::aim(Vec3(x,y,0.0f) , Vec3(0.0f, 0.0f, 0.0f));
+            const float aim = util::aim(Vec3(x,y,0.0f) , Vec3(ssl_geometry_.field_length_, 0.0f, 0.0f));
             PID pid(cmd);
             pid.calcProportional(Vec3(x,y,w), Vec3 (3.0f, 2.0f, aim));
             cmd.kick_ = 7.0f;
