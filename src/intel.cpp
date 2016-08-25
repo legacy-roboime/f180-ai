@@ -31,14 +31,8 @@ void Intel::geometryInput(){
     ssl_geometry_ = Geometry(field_length, field_width, goal_width, center_circle_radius, defense_radius, defense_stretch); 
 }
 
-void Intel::loop(){
-    while (true) {
-    // State 
-    vector<int> ids;
-    float x = 0.0f, y = 0.0f, w = 0.0f;
-    float tx = 0.0f, ty = 0.0f, tw = 0.0f;
-    // Input
-
+void Intel::stateIO(){
+   // Input
     int     counter;
     float   timestamp;
     char    referee_state;
@@ -51,33 +45,38 @@ void Intel::loop(){
         >> referee_state >> referee_time_left
         >> score_player >> score_opponent
         >> goalie_id_player >> goalie_id_opponent;
-    state_ = State(counter, timestamp, referee_state, referee_time_left, score_player, score_opponent, goalie_id_player, goalie_id_opponent);
+    
+    state_ = State(counter,
+                  timestamp,
+                  referee_state,
+                  referee_time_left,
+                  score_player, score_opponent,
+                  goalie_id_player,
+                  goalie_id_opponent);
 
     float ball_x, ball_y, ball_vx, ball_vy;
-
     cin >> ball_x >> ball_y >> ball_vx >> ball_vy;
-    Ball ball(Vec3 (ball_x, ball_y, 0.0f) , Vec3(ball_vx, ball_vy, 0.0f));
+    ball_ = Ball(Vec3 (ball_x, ball_y, 0.0f) , Vec3(ball_vx, ball_vy, 0.0f));
     
+}
+
+void Intel::loop(){
+    while (true) {    
+    stateIO();
+    vector<Robot> our_robots;
+    vector<Robot> their_robots;
     int robot_count_player;
     cin >> robot_count_player;
-    vector<Robot> our_robots;
     for (int i = 0; i < robot_count_player; ++i) {
         int robot_id;
         float robot_x, robot_y, robot_w, robot_vx, robot_vy, robot_vw;
 
         cin >> robot_id >> robot_x >> robot_y >> robot_w >> robot_vx >> robot_vy >> robot_vw;
-        ids.push_back(robot_id);
         our_robots.push_back(Robot(Vec3(robot_x,robot_y,robot_w), Vec3(robot_vx, robot_vy, robot_vw), robot_id, true));
-        if (robot_id == 0) {
-            x = robot_x;
-            y = robot_y;
-            w = robot_w;
-        }
-    }
+   }
 
     int robot_count_opponent;
     cin >> robot_count_opponent;
-    vector<Robot> their_robots;
     for (int i = 0; i < robot_count_opponent; ++i) {
         int robot_id;
         float robot_x, robot_y, robot_w, robot_vx, robot_vy, robot_vw;
@@ -85,32 +84,17 @@ void Intel::loop(){
         cin >> robot_id >> robot_x >> robot_y >> robot_w >> robot_vx >> robot_vy >> robot_vw;
         their_robots.push_back(Robot(Vec3(robot_x,robot_y,robot_w), Vec3(robot_vx, robot_vy, robot_vw), robot_id, false));
     }
+    cout << state_.counter_ << endl;
 
-    tx = ball_x;
-    ty = ball_y;
-    tw = 0.0f;
-
-    cout << counter << endl;
-
-    for (int i = 0; i < ids.size() ; ++i) {
-        const int   robot_id = ids[i];
-        float       v_tangent = 0.0f;
-        float       v_normal = 0.0f;
-        float       v_angular = 0.0f;
-        float       kick_force = 0.0f;
-        float       chip_force = 0.0f;
-        bool        dribble = false;
-        Command cmd(v_tangent, v_normal, v_angular, kick_force, chip_force, dribble);
-
+ 
+    for (int i = 0; i < our_robots.size() ; ++i) {
+        const int robot_id = our_robots.at(i).getId();
         if (robot_id == 0) {
-            const float aim = util::aim(Vec3(x,y,0.0f) , Vec3(ssl_geometry_.field_length_, 0.0f, 0.0f));
-            PID pid(cmd);
-            pid.calcProportional(Vec3(x,y,w), Vec3 (3.0f, 2.0f, aim));
-            cmd.kick_ = 7.0f;
-            cmd.dribble_ = false;
+            our_robots.at(i).goToAiming(Vec3(2.0f, 3.0f, 0.0f), Vec3(-ssl_geometry_.field_length_, 0.0f, 0.0f) );
+            our_robots.at(i).setKick(7.0f);
         }
-        cmd.print();
-        cmd.printerr();
+        our_robots.at(i).getCommand().print();
+        our_robots.at(i).getCommand().printerr();
         }        
     }
 }

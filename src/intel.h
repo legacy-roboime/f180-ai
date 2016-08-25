@@ -17,6 +17,7 @@ public:
     ~Intel() = default;
 
     void geometryInput();
+    void stateIO();
     void loop();  
 
     Geometry getGeometry() const { return ssl_geometry_; }
@@ -24,6 +25,7 @@ public:
 private:
     Geometry ssl_geometry_;
     State state_;
-    std::vector<Robot>* our_robots_;
-    std::vector<Robot>* their_robots_;
+    Ball ball_;
+    std::vector<Robot> our_robots_;
+    std::vector<Robot> their_robots_;
 };
