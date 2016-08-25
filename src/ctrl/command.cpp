@@ -20,6 +20,13 @@ Command::Command(float vt, float vn, float vw, float kick, float chip, bool drib
     chip_ = chip;
     dribble_ = dribble;
 }
+Command::Command(Vec3 vel, float kick, float chip, bool dribble){
+    vt_ = vel.x_;
+    vn_ = vel.y_;
+    vw_ = vel.w_;
+    chip_ = chip;
+    dribble_ = dribble;
+}
 
 void Command::print(){
     cout << vt_ << " " << vn_ << " " << vw_ << " " << kick_ << " " << chip_ << " " << dribble_ << endl;

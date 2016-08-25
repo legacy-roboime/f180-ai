@@ -14,3 +14,6 @@ void PID::calcProportional(const Vec3 pose_now, const Vec3 pose_then) {
     cmd_->vw_ = PW * util::wrap(pose_then.w_ - pose_now.w_);
 }
 
+void PID::setCommandPtr(Command& cmd){
+    cmd_ = &cmd;
+}
