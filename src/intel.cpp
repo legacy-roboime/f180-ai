@@ -3,14 +3,6 @@ using namespace std;
 Intel::Intel(std::vector<Robot> our_robots, std::vector<Robot> their_robots){
     
 }
-/*
-void Intel::setGeometry ( Geometry ssl_geometry ){
-    ssl_geometry_ = ssl_geometry;
-}
-
-void Intel::setState ( State state ){
-    state_ = state;
-}*/
 
 void Intel::geometryInput(){ 
     float field_length;
@@ -67,12 +59,20 @@ void Intel::loop(){
     vector<Robot> their_robots;
     int robot_count_player;
     cin >> robot_count_player;
+
+    int closer_one_id;
+    float min_dist = 1e99;
     for (int i = 0; i < robot_count_player; ++i) {
         int robot_id;
         float robot_x, robot_y, robot_w, robot_vx, robot_vy, robot_vw;
-
+        
         cin >> robot_id >> robot_x >> robot_y >> robot_w >> robot_vx >> robot_vy >> robot_vw;
         our_robots.push_back(Robot(Vec3(robot_x,robot_y,robot_w), Vec3(robot_vx, robot_vy, robot_vw), robot_id, true));
+        const float current_dist = util::dist2(our_robots.back().getPose(), ball_.pose_);
+        if (current_dist < min_dist){
+            min_dist = current_dist;
+            closer_one_id = robot_id;
+        }
    }
 
     int robot_count_opponent;
@@ -85,16 +85,55 @@ void Intel::loop(){
         their_robots.push_back(Robot(Vec3(robot_x,robot_y,robot_w), Vec3(robot_vx, robot_vy, robot_vw), robot_id, false));
     }
     cout << state_.counter_ << endl;
+    switch(state_.referee_state_){
+        case 'N':
+            for (int i = 0; i < our_robots.size() ; ++i) {
+                Robot mr_robot = our_robots.at(i);
+                const int robot_id = our_robots.at(i).getId();
 
- 
-    for (int i = 0; i < our_robots.size() ; ++i) {
-        const int robot_id = our_robots.at(i).getId();
-        if (robot_id == 0) {
-            our_robots.at(i).goToAiming(Vec3(2.0f, 3.0f, 0.0f), Vec3(-ssl_geometry_.field_length_, 0.0f, 0.0f) );
-            our_robots.at(i).setKick(7.0f);
+                if (robot_id == state_.goalie_id_player_){
+                    mr_robot.goToAiming(Vec3(-ssl_geometry_.field_length_*0.5, 0.0f, 0.0f), ball_.pose_);
+                }
+                if (robot_id == closer_one_id) {
+                    mr_robot.goToAiming(ball_.pose_, Vec3(ssl_geometry_.field_length_*0.5, 0.0f, 0.0f) );
+                    mr_robot.setKick(5.0f);
+                }
+                mr_robot.getCommand().print(); 
+            }
+            break;
+        case 'S':
+            for (int i = 0; i < our_robots.size() ; ++i) {
+                Robot mr_robot = our_robots.at(i);
+                const int robot_id = our_robots.at(i).getId();
+
+                if (robot_id == state_.goalie_id_player_){
+                    mr_robot.goToAiming(Vec3(-ssl_geometry_.field_length_*0.5, 0.0f, 0.0f), ball_.pose_);
+                }
+                if (robot_id == closer_one_id) {
+                    mr_robot.goToAiming(ball_.pose_+Vec3(-0.5f,-0.5f,0.0f), Vec3(ssl_geometry_.field_length_*0.5, 0.0f, 0.0f) );
+                    mr_robot.setKick(5.0f);
+                }
+                mr_robot.getCommand().print(); 
+            }
+            break;
+
+
+        default:
+            for (int i = 0; i < our_robots.size() ; ++i) {
+                Robot mr_robot = our_robots.at(i);
+                const int robot_id = our_robots.at(i).getId();
+
+                if (robot_id == state_.goalie_id_player_){
+                    mr_robot.goToAiming(Vec3(-ssl_geometry_.field_length_*0.5, 0.0f, 0.0f), ball_.pose_);
+                }
+                if (robot_id == closer_one_id) {
+                    mr_robot.goToAiming(ball_.pose_, Vec3(ssl_geometry_.field_length_*0.5, 0.0f, 0.0f) );
+                    mr_robot.setKick(5.0f);
+                }
+                mr_robot.getCommand().print(); 
+            }
         }
-        our_robots.at(i).getCommand().print();
-        our_robots.at(i).getCommand().printerr();
-        }        
+
     }
 }
+    
