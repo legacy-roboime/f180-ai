@@ -13,6 +13,7 @@ namespace util{
     float dist(const Vec3 pose1, const Vec3 pose2) ;
     float dist2(const Vec3 pose1, const Vec3 pose2) ;
     float aim(const Vec3 shooter, const Vec3 target) ; //TODO:names
-    float mod(const float val) ;
+    float mod(const Vec3 vec);
+    Vec3 normalize(const Vec3 vec) ;
 }
 

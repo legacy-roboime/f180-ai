@@ -24,8 +24,12 @@ float util::dist2(const Vec3 pose1, const Vec3 pose2) {
 }
 
 
-float util::mod(const float val){
-    return val>0?val:-val;
+float util::mod(const Vec3 vec){
+    return sqrt(vec.x_*vec.x_ + vec.y_*vec.y_);
+}
+
+Vec3 util::normalize(const Vec3 vec){
+    return vec*(1/mod(vec));
 }
 
 float util::aim(const Vec3 shooter, const Vec3 target){

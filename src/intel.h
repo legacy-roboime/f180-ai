@@ -29,3 +29,5 @@ private:
     std::vector<Robot> our_robots_;
     std::vector<Robot> their_robots_;
 };
+
+static Vec3 ENEMY_GOAL;
