@@ -120,13 +120,13 @@ void Intel::loop(){
                     case ATTACKER:
                         const float current_dist = util::dist2(mr_robot.getPose(), ball_.pose_);
                         if(mr_robot.isClosest()){    
-                            if(current_dist >= 0.30f){
+                            if(current_dist >= 0.019f){ // Arbitrary value
                                 mr_robot.goToAiming(ball_.pose_, ball_.pose_);
                             } else if (!mr_robot.isAiming(ball_.pose_)) {
+                                cerr << "not aiming ball" << endl;
                                 mr_robot.goToAiming(mr_robot.getPose(), ball_.pose_);
-                                cerr << "debug" << endl;
-                            } else if (!mr_robot.isAiming(ENEMY_GOAL)) {
-                                mr_robot.rotateAround(ball_.pose_, ENEMY_GOAL);
+                            } else if (!mr_robot.isAiming(Vec3(3.0f,2.0f,0.0f))) {
+                                mr_robot.rotateAround(ball_.pose_, Vec3(3.0f,2.0f,0.0f));
                             } else {
                                 mr_robot.goToAiming(ball_.pose_, ENEMY_GOAL);
                                 mr_robot.setKick(5.0f);
@@ -147,8 +147,16 @@ void Intel::loop(){
                 if (robot_id == state_.goalie_id_player_){
                     mr_robot.goToAiming(Vec3(-ssl_geometry_.field_length_*0.5, 0.0f, 0.0f), ball_.pose_);
                 } else if (mr_robot.isClosest()) {
-                    mr_robot.goToAiming(ball_.pose_-util::normalize(ball_.pose_)*0.5f, ENEMY_GOAL);
-                    mr_robot.setKick(5.0f);
+                    if (!mr_robot.isAiming(ball_.pose_)) {
+                        mr_robot.goToAiming(mr_robot.getPose(), ball_.pose_);
+                    } else if (!mr_robot.isAiming(ENEMY_GOAL)) {
+                        mr_robot.rotateAround(ball_.pose_, ENEMY_GOAL);
+                    } else {
+                        mr_robot.goToAiming(ball_.pose_, ENEMY_GOAL);
+                        mr_robot.setKick(5.0f);
+                    }
+
+                    mr_robot.goToAiming(ball_.pose_-util::normalize(ball_.pose_)*0.5f, ball_.pose_);
                 } else {
 
                 }
