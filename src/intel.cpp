@@ -123,7 +123,7 @@ void Intel::loop(){
                    case ATTACKER:{
                         if(mr_robot.isClosest()){
                             const float current_dist = util::dist2(mr_robot.getPose(), ball_.pose_);
-                            if(current_dist >= 0.20f*0.20f){ // Arbitrary value
+                            if(current_dist >= 0.15f*0.15f){ // Arbitrary value
                                 mr_robot.goToAiming(ball_.pose_, ball_.pose_);
                             } else {
                                 if(!mr_robot.isAiming(ball_.pose_)) {
