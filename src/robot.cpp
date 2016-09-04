@@ -37,7 +37,7 @@ bool Robot::isAiming(const Vec3 target) const {
     const float current_angle = util::wrap(pose_.w_);
     const float aim = util::aim(pose_, target);
     const float diff = fabs(current_angle-aim);
-    if (diff <= 0.03f) { return true; }
+    if (diff <= 0.04f) { return true; }
     else { return false; }
 }
 
@@ -47,7 +47,6 @@ void Robot::setKick(float kick){
 }
 
 void Robot::rotateAround(Vec3 center, Vec3 target){
-    cerr << "rotate method entered" << endl ;
     const float radius = sqrt(util::dist2(center, pose_));
     const float final_angle = util::aim(center, target);
     Vec3 final_pose(pose_.x_+radius*( cos(pose_.w_) - cos(final_angle) ),

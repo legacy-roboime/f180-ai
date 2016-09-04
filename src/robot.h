@@ -6,6 +6,12 @@
 
 //TODO:set inputs to const (review)
 
+enum Action{
+    GOTOWARD,
+    ROTATEAROUND,
+    GOTOKICK
+};
+
 enum Stance{
     ATTACKER,
     DEFENDER,
@@ -39,6 +45,7 @@ public:
     void setDribble( bool dribble );
 private:
     Stance stance_;
+    Action action_;
     int id_;
     bool is_friend_;
     bool is_closest_; // TODO: has ball algorithm

@@ -1,5 +1,6 @@
 #include "intel.h"
 using namespace std;
+
 Intel::Intel(std::vector<Robot> our_robots, std::vector<Robot> their_robots){
     
 }
@@ -54,13 +55,14 @@ void Intel::stateIO(){
 }
 
 void Intel::loop(){
-    while (true) {    
+    while (true){
     stateIO();
     vector<Robot> our_robots;
     vector<Robot> their_robots;
     int robot_count_player;
     cin >> robot_count_player;
 
+    int def_counter = 0;
     int closer_one_id;
     int second_closer_id;
     float min_dist = 1e99;
@@ -79,9 +81,7 @@ void Intel::loop(){
             min2_dist = current_dist;
             second_closer_id = robot_id;
         }
-
-   }
-
+    }
     int robot_count_opponent;
     cin >> robot_count_opponent;
     for (int i = 0; i < robot_count_opponent; ++i) {
@@ -92,8 +92,10 @@ void Intel::loop(){
         their_robots.push_back(Robot(Vec3(robot_x,robot_y,robot_w), Vec3(robot_vx, robot_vy, robot_vw), robot_id, false));
     }
     cout << state_.counter_ << endl;
+
+    int middle_def_id;
     switch(state_.referee_state_){
-        case 'N':
+        case 'N':{
             for (int i = 0; i < our_robots.size() ; ++i) {
                 Robot mr_robot = our_robots.at(i);
                 const int robot_id = our_robots.at(i).getId();
@@ -103,43 +105,65 @@ void Intel::loop(){
                 } else if (robot_id == second_closer_id){
                     mr_robot.setStance(ATTACKER);
                     mr_robot.setClosest(false);
-                } else {
+                } else if (robot_id == state_.goalie_id_player_){
+                    mr_robot.setStance(NONE);
+                } 
+                else {
                     mr_robot.setStance(DEFENDER);
+                    if(def_counter == 0){
+                      middle_def_id = robot_id;  
+                    }
+                    def_counter++;
                 }
-#if 0 
-                if (robot_id == state_.goalie_id_player_){
-                    mr_robot.goToAiming(Vec3(-ssl_geometry_.field_length_*0.5, 0.0f, 0.0f), ball_.pose_);
-                } else if (mr_robot.isClosest()) {
-                    mr_robot.goToAiming(ball_.pose_, Vec3(ssl_geometry_.field_length_*0.5, 0.0f, 0.0f) );
-                    mr_robot.setKick(5.0f);
-                } else if (mr_robot.getStance() == ATTACKER){
-                    mr_robot.goToAiming(Vec3(),  Vec3(ssl_geometry_.field_length_*0.5, 0.0f, 0.0f));
-                }
-#else
+                int defsign = - 1;
                 switch(mr_robot.getStance()){
-                    case ATTACKER:
-                        const float current_dist = util::dist2(mr_robot.getPose(), ball_.pose_);
-                        if(mr_robot.isClosest()){    
-                            if(current_dist >= 0.019f){ // Arbitrary value
+                   case ATTACKER:{
+                        if(mr_robot.isClosest()){
+                            const float current_dist = util::dist2(mr_robot.getPose(), ball_.pose_);
+                            if(current_dist >= 0.015f){ // Arbitrary value
                                 mr_robot.goToAiming(ball_.pose_, ball_.pose_);
-                            } else if (!mr_robot.isAiming(ball_.pose_)) {
-                                cerr << "not aiming ball" << endl;
-                                mr_robot.goToAiming(mr_robot.getPose(), ball_.pose_);
-                            } else if (!mr_robot.isAiming(Vec3(3.0f,2.0f,0.0f))) {
-                                mr_robot.rotateAround(ball_.pose_, Vec3(3.0f,2.0f,0.0f));
                             } else {
+                                if(!mr_robot.isAiming(ball_.pose_)) {
+                                    mr_robot.goToAiming(mr_robot.getPose(), ball_.pose_);
+                                } else if(!mr_robot.isAiming(Vec3(3.0f,2.0f,0.0f))) {
+                                    mr_robot.rotateAround(ball_.pose_, Vec3(3.0f,2.0f,0.0f));
+                                } else {
                                 mr_robot.goToAiming(ball_.pose_, ENEMY_GOAL);
                                 mr_robot.setKick(5.0f);
+                                }
                             }
                         } else {
-                            
+                        //    mr_robot.goToAiming(Vec3(-3.0f,2.0f,0.0f), ENEMY_GOAL);
                         }
-                }
-#endif
-                mr_robot.getCommand().print(); 
+                    }
+                    break;
+#if 0
+                    case DEFENDER:{
+                        if(def_counter != 0){
+                            if(robot_id == middle_def_id){
+                              mr_robot.goToAiming(ENEMY_GOAL*(-1)+Vec3(0.8f,0.0f,0.0f), ball_.pose_); // magic
+                            } else {
+                            mr_robot.goToAiming(ENEMY_GOAL*(-1)+Vec3(0.8f,0.5*defsign,0.0f), ball_.pose_); // magic
+                            }
+                            defsign*= (-1);
+                            def_counter--;
+                        }
+                    }
+                    break;
+                    case NONE:{
+                        mr_robot.goToAiming(ENEMY_GOAL*(-1), ball_.pose_);
+                        break;
+                    }
+                    break;
+#endif 
+                    default:
+                    break;
+               }
+            mr_robot.getCommand().print();
             }
+        }
             break;
-        case 'S':
+        case 'S':{
             for (int i = 0; i < our_robots.size() ; ++i) {
                 Robot mr_robot = our_robots.at(i);
                 const int robot_id = our_robots.at(i).getId();
@@ -155,15 +179,15 @@ void Intel::loop(){
                         mr_robot.goToAiming(ball_.pose_, ENEMY_GOAL);
                         mr_robot.setKick(5.0f);
                     }
-
                     mr_robot.goToAiming(ball_.pose_-util::normalize(ball_.pose_)*0.5f, ball_.pose_);
                 } else {
 
                 }
                 mr_robot.getCommand().print(); 
             }
+        }
             break;
-        default:
+        default:{
             for (int i = 0; i < our_robots.size() ; ++i) {
                 Robot mr_robot = our_robots.at(i);
                 const int robot_id = our_robots.at(i).getId();
@@ -181,7 +205,8 @@ void Intel::loop(){
                 mr_robot.getCommand().print();
             }
         }
-
+            break;
+    }
     }
 }
     
