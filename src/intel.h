@@ -31,3 +31,5 @@ private:
 };
 
 static Vec3 ENEMY_GOAL;
+static Vec3 OUR_GOAL;
+static Vec3 TOP_MID;

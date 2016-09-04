@@ -9,7 +9,7 @@ Robot::Robot() { //TODO: review setCommandPtr in this;
 
 Robot::Robot(Vec3 pose, Vec3 vel, int id, bool is_friend):
 		id_(id), vel_(vel), pose_(pose), is_friend_(is_friend), stance_(NONE)
-        { pid_.setCommandPtr(cmd_); }
+        { pid_.setCommandPtr(cmd_); } //TODO: debug
 
 void Robot::setId( int id ){
     id_ = id;
@@ -37,8 +37,7 @@ bool Robot::isAiming(const Vec3 target) const {
     const float current_angle = util::wrap(pose_.w_);
     const float aim = util::aim(pose_, target);
     const float diff = fabs(current_angle-aim);
-    if (diff <= 0.04f) { return true; }
-    else { return false; }
+    return diff <= PI/180.0f;
 }
 
 void Robot::setKick(float kick){
@@ -54,4 +53,6 @@ void Robot::rotateAround(Vec3 center, Vec3 target){
                     final_angle);
     PID pid(cmd_);
     pid.calcProportional(pose_, final_pose);
+    cmd_.vt_ = 0.0f;
+    cmd_.vn_ = -cmd_.vw_*radius;
 }

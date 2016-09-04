@@ -1,4 +1,5 @@
 #include "intel.h"
+#define TARGET OUR_GOAL 
 using namespace std;
 
 Intel::Intel(std::vector<Robot> our_robots, std::vector<Robot> their_robots){
@@ -22,7 +23,9 @@ void Intel::geometryInput(){
 
     cerr << "initialized" << endl;
     ssl_geometry_ = Geometry(field_length, field_width, goal_width, center_circle_radius, defense_radius, defense_stretch); 
-    ENEMY_GOAL = Vec3(field_length*0.5f,0.0f,0.0f);
+    ENEMY_GOAL = Vec3(field_length*0.5f, 0.0f, 0.0f);
+    OUR_GOAL = Vec3(-field_length*0.5f, 0.0f, 0.0f);
+    TOP_MID = Vec3(0.0f, field_width*0.5f, 0.0f);
 }
 
 void Intel::stateIO(){
@@ -120,16 +123,19 @@ void Intel::loop(){
                    case ATTACKER:{
                         if(mr_robot.isClosest()){
                             const float current_dist = util::dist2(mr_robot.getPose(), ball_.pose_);
-                            if(current_dist >= 0.015f){ // Arbitrary value
+                            if(current_dist >= 0.20f*0.20f){ // Arbitrary value
                                 mr_robot.goToAiming(ball_.pose_, ball_.pose_);
                             } else {
                                 if(!mr_robot.isAiming(ball_.pose_)) {
+                                    cerr << "NOT AIMING" << endl;
                                     mr_robot.goToAiming(mr_robot.getPose(), ball_.pose_);
-                                } else if(!mr_robot.isAiming(Vec3(3.0f,2.0f,0.0f))) {
-                                    mr_robot.rotateAround(ball_.pose_, Vec3(3.0f,2.0f,0.0f));
+                                } else if(!mr_robot.isAiming(TARGET)) {
+                                    cerr << "ROTATING" << endl;
+                                    mr_robot.rotateAround(ball_.pose_, TARGET);
                                 } else {
-                                mr_robot.goToAiming(ball_.pose_, ENEMY_GOAL);
-                                mr_robot.setKick(5.0f);
+                                    cerr << "AIMING" << endl;
+                                    mr_robot.goToAiming(ball_.pose_, TARGET);
+                                    mr_robot.setKick(5.0f);
                                 }
                             }
                         } else {
@@ -177,7 +183,7 @@ void Intel::loop(){
                         mr_robot.rotateAround(ball_.pose_, ENEMY_GOAL);
                     } else {
                         mr_robot.goToAiming(ball_.pose_, ENEMY_GOAL);
-                        mr_robot.setKick(5.0f);
+                        mr_robot.setKick(3.0f);
                     }
                     mr_robot.goToAiming(ball_.pose_-util::normalize(ball_.pose_)*0.5f, ball_.pose_);
                 } else {
@@ -189,9 +195,8 @@ void Intel::loop(){
             break;
         default:{
             for (int i = 0; i < our_robots.size() ; ++i) {
-                Robot mr_robot = our_robots.at(i);
-                const int robot_id = our_robots.at(i).getId();
-
+              Robot mr_robot = our_robots.at(i);
+/*                const int robot_id = our_robots.at(i).getId();
                 if (robot_id == state_.goalie_id_player_){
                     mr_robot.goToAiming(Vec3(-ssl_geometry_.field_length_*0.5, 0.0f, 0.0f), ball_.pose_);
                 }
@@ -200,8 +205,9 @@ void Intel::loop(){
                     mr_robot.setKick(5.0f);
                 }
                 if (robot_id == second_closer_id){
-                    mr_robot.goToAiming(Vec3(),  Vec3(ball_.pose_));
+                    mr_robot.goToAiming(Vec3(0.0f, 0.0f, 0.0f),  Vec3(ball_.pose_));
                 }
+                */
                 mr_robot.getCommand().print();
             }
         }
