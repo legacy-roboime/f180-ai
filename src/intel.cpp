@@ -1,5 +1,5 @@
 #include "intel.h"
-#define TARGET OUR_GOAL 
+#define TARGET ENEMY_GOAL
 using namespace std;
 
 Intel::Intel(std::vector<Robot> our_robots, std::vector<Robot> their_robots){
@@ -118,22 +118,18 @@ void Intel::loop(){
                     }
                     def_counter++;
                 }
-                int defsign = - 1;
                 switch(mr_robot.getStance()){
                    case ATTACKER:{
                         if(mr_robot.isClosest()){
-                            const float current_dist = util::dist2(mr_robot.getPose(), ball_.pose_);
-                            if(current_dist >= 0.15f*0.15f){ // Arbitrary value
+                            const float current_dist2 = util::dist2(mr_robot.getPose(), ball_.pose_);
+                            if(current_dist2 >= 0.15f*0.15f){ 
                                 mr_robot.goToAiming(ball_.pose_, ball_.pose_);
                             } else {
                                 if(!mr_robot.isAiming(ball_.pose_)) {
-                                    cerr << "NOT AIMING" << endl;
                                     mr_robot.goToAiming(mr_robot.getPose(), ball_.pose_);
                                 } else if(!mr_robot.isAiming(TARGET)) {
-                                    cerr << "ROTATING" << endl;
                                     mr_robot.rotateAround(ball_.pose_, TARGET);
                                 } else {
-                                    cerr << "AIMING" << endl;
                                     mr_robot.goToAiming(ball_.pose_, TARGET);
                                     mr_robot.setKick(5.0f);
                                 }
@@ -183,7 +179,7 @@ void Intel::loop(){
                         mr_robot.rotateAround(ball_.pose_, ENEMY_GOAL);
                     } else {
                         mr_robot.goToAiming(ball_.pose_, ENEMY_GOAL);
-                        mr_robot.setKick(3.0f);
+                        mr_robot.setKick(4.0f);
                     }
                     mr_robot.goToAiming(ball_.pose_-util::normalize(ball_.pose_)*0.5f, ball_.pose_);
                 } else {

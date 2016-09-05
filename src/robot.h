@@ -3,14 +3,9 @@
 #include "env/utils.h"
 #include "ctrl/pid.h"
 #include "ctrl/command.h"
+#include "intel.h"
 
 //TODO:set inputs to const (review)
-
-enum Action{
-    GOTOWARD,
-    ROTATEAROUND,
-    GOTOKICK
-};
 
 enum Stance{
     ATTACKER,
@@ -38,6 +33,7 @@ public:
     void setInput( Vec3 pose, Vec3 vel, int id );
     void setStance( Stance stance );
     void setClosest( bool is_closest );
+    void setIntel( Intel& intel );
 
     void goToAiming( Vec3 pose, Vec3 target );
     void rotateAround( Vec3 center , Vec3 target);
@@ -45,12 +41,11 @@ public:
     void setDribble( bool dribble );
 private:
     Stance stance_;
-    Action action_;
     int id_;
     bool is_friend_;
     bool is_closest_; // TODO: has ball algorithm
     PID pid_;
     Command cmd_;
     Vec3 pose_,vel_;
-    Robot* robots_allies_;
+    Intel* intel_;
 };
