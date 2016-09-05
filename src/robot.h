@@ -33,7 +33,6 @@ public:
     void setInput( Vec3 pose, Vec3 vel, int id );
     void setStance( Stance stance );
     void setClosest( bool is_closest );
-    void setIntel( Intel& intel );
 
     void goToAiming( Vec3 pose, Vec3 target );
     void rotateAround( Vec3 center , Vec3 target);
@@ -47,5 +46,4 @@ private:
     PID pid_;
     Command cmd_;
     Vec3 pose_,vel_;
-    Intel* intel_;
 };

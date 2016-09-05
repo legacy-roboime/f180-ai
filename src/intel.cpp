@@ -2,10 +2,6 @@
 #define TARGET ENEMY_GOAL
 using namespace std;
 
-Intel::Intel(std::vector<Robot> our_robots, std::vector<Robot> their_robots){
-    
-}
-
 void Intel::geometryInput(){ 
     float field_length;
     float field_width;
