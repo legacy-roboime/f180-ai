@@ -1,4 +1,5 @@
 #include "utils.h"
+#include <cmath>
 
 const float EPS = 1e-9;
 
@@ -39,4 +40,8 @@ float util::aim(const Vec3 shooter, const Vec3 target){
     const float x = target.x_ - shooter.x_;
     const float y = target.y_ - shooter.y_;
     return atan2(y,x);
+}
+
+Vec3 util::rec(const float r, const float theta) {
+  return Vec3(r*cos(theta),r*sin(theta),0);
 }
