@@ -1,21 +1,23 @@
 MAIN = nu-intel
-CLIFLAGS = 
-GUIFLAGS = 
-CXX = clang++-3.5 -std=c++11
+CLIFLAGS = ./$(MAIN)
+GUIFLAGS = --blue=./$(MAIN) -v
+#CXX = clang++-3.5 -std=c++11
+#CXX = clang++ -std=c++11
+CXX = g++ -std=c++11
 SRC := $(shell find -name '*.cpp')
 VPATH = amb
 
-*.o: $(SRC) 
+*.o: $(SRC)
 	$(CXX) -c $(SRC)
 
 $(MAIN): *.o
 	$(CXX) *.o -o $(MAIN)
 
 gui: $(MAIN)
-	roboime-next-gui $(GUIFLAGS) ./$(MAIN)
+	roboime-next-gui $(GUIFLAGS)
 
 cli: $(MAIN)
-	roboime-next-cli $(CLIFLAGS) ./$(MAIN) 
+	roboime-next-cli $(CLIFLAGS)
 clean:
 	rm -f $(MAIN) *.o
 
