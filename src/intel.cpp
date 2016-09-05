@@ -177,7 +177,7 @@ void Intel::loop(){
                         mr_robot.goToAiming(ball_.pose_, ENEMY_GOAL);
                         mr_robot.setKick(4.0f);
                     }
-                    mr_robot.goToAiming(ball_.pose_-util::normalize(ball_.pose_)*0.5f, ball_.pose_);
+                    mr_robot.goToAiming(mr_robot.getPose(), ball_.pose_-util::normalize(ball_.pose_)*.5f);
                 } else {
 
                 }

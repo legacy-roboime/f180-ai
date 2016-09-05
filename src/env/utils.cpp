@@ -1,5 +1,7 @@
 #include "utils.h"
 
+const float EPS = 1e-9;
+
 float util::rad(const float deg) {
     return (PI*deg/180.0);
 }
@@ -29,6 +31,7 @@ float util::mod(const Vec3 vec){
 }
 
 Vec3 util::normalize(const Vec3 vec){
+    if(fabs(mod(vec))<EPS) return vec;
     return vec*(1/mod(vec));
 }
 
