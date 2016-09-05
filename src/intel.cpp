@@ -137,6 +137,7 @@ void Intel::loop(){
           }
           break;
           case DEFENDER:{
+            mr_robot.goToAiming(Vec3(-ssl_geometry_.field_length_/2+ssl_geometry_.defense_radius_,0,0),Vec3());
           }
           break;
           default:
@@ -170,6 +171,8 @@ void Intel::loop(){
       }
       break;
       default:{
+        for(int i = 0; i < our_robots.size();i++)
+          our_robots.at(i).getCommand().print();
         break;
       }
     }
