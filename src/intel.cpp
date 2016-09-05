@@ -39,13 +39,14 @@ void Intel::stateIO(){
     >> score_player >> score_opponent
     >> goalie_id_player >> goalie_id_opponent;
 
-  state_ = State(counter,
-      timestamp,
-      referee_state,
-      referee_time_left,
-      score_player, score_opponent,
-      goalie_id_player,
-      goalie_id_opponent);
+  state_ = State(
+    counter,
+    timestamp,
+    referee_state,
+    referee_time_left,
+    score_player, score_opponent,
+    goalie_id_player,
+    goalie_id_opponent);
 
   float ball_x, ball_y, ball_vx, ball_vy;
   cin >> ball_x >> ball_y >> ball_vx >> ball_vy;
@@ -94,83 +95,83 @@ void Intel::loop(){
 
     int middle_def_id;
     switch(state_.referee_state_){
-    case 'N':{
-      for (int i = 0; i < our_robots.size() ; ++i) {
-      Robot mr_robot = our_robots.at(i);
-      const int robot_id = our_robots.at(i).getId();
-      if(robot_id == closer_one_id){
-        mr_robot.setStance(ATTACKER);
-        mr_robot.setClosest(true);
-      } else if (robot_id == second_closer_id){
-        mr_robot.setStance(ATTACKER);
-        mr_robot.setClosest(false);
-      } else if (robot_id == state_.goalie_id_player_){
-         mr_robot.setStance(NONE);
-      }
-      else {
-        mr_robot.setStance(DEFENDER);
-        if(def_counter == 0){
-          middle_def_id = robot_id;
+      case 'N':{
+        for (int i = 0; i < our_robots.size() ; ++i) {
+        Robot mr_robot = our_robots.at(i);
+        const int robot_id = our_robots.at(i).getId();
+        if(robot_id == closer_one_id){
+          mr_robot.setStance(ATTACKER);
+          mr_robot.setClosest(true);
+        } else if (robot_id == second_closer_id){
+          mr_robot.setStance(ATTACKER);
+          mr_robot.setClosest(false);
+        } else if (robot_id == state_.goalie_id_player_){
+           mr_robot.setStance(NONE);
         }
-        def_counter++;
-      }
-      switch(mr_robot.getStance()){
-        case ATTACKER:{
-          if(mr_robot.isClosest()){
-            const float current_dist2 = util::dist2(mr_robot.getPose(), ball_.pose_);
-            if(current_dist2 >= 0.15f*0.15f){
-              mr_robot.goToAiming(ball_.pose_, ball_.pose_);
-            } else {
-              if(!mr_robot.isAiming(ball_.pose_)) {
-                mr_robot.goToAiming(mr_robot.getPose(), ball_.pose_);
-            } else if(!mr_robot.isAiming(TARGET)) {
-                mr_robot.rotateAround(ball_.pose_, TARGET);
-            } else {
-                mr_robot.goToAiming(ball_.pose_, TARGET);
-                mr_robot.setKick(5.0f);
+        else {
+          mr_robot.setStance(DEFENDER);
+          if(def_counter == 0){
+            middle_def_id = robot_id;
+          }
+          def_counter++;
+        }
+        switch(mr_robot.getStance()){
+          case ATTACKER:{
+            if(mr_robot.isClosest()){
+              const float current_dist2 = util::dist2(mr_robot.getPose(), ball_.pose_);
+              if(current_dist2 >= 0.15f*0.15f){
+                mr_robot.goToAiming(ball_.pose_, ball_.pose_);
+              } else {
+                if(!mr_robot.isAiming(ball_.pose_)) {
+                  mr_robot.goToAiming(mr_robot.getPose(), ball_.pose_);
+              } else if(!mr_robot.isAiming(TARGET)) {
+                  mr_robot.rotateAround(ball_.pose_, TARGET);
+              } else {
+                  mr_robot.goToAiming(ball_.pose_, TARGET);
+                  mr_robot.setKick(5.0f);
+                }
               }
+            } else {
+
             }
+          }
+          break;
+          case DEFENDER:{
+          }
+          break;
+          default:
+          break;
+        }
+        mr_robot.getCommand().print();
+        }
+      }
+      break;
+      case 'S':{
+        for (int i = 0; i < our_robots.size() ; ++i){
+        Robot mr_robot = our_robots.at(i);
+        const int robot_id = our_robots.at(i).getId();
+        if (robot_id == state_.goalie_id_player_){
+          mr_robot.goToAiming(Vec3(-ssl_geometry_.field_length_*0.5, 0.0f, 0.0f), ball_.pose_);
+        } else if (mr_robot.isClosest()) {
+          if (!mr_robot.isAiming(ball_.pose_)) {
+            mr_robot.goToAiming(mr_robot.getPose(), ball_.pose_);
+          } else if (!mr_robot.isAiming(ENEMY_GOAL)) {
+            mr_robot.rotateAround(ball_.pose_, ENEMY_GOAL);
+          } else {
+            mr_robot.goToAiming(ball_.pose_, ENEMY_GOAL);
+            mr_robot.setKick(4.0f);
+          }
+          mr_robot.goToAiming(mr_robot.getPose(), ball_.pose_-util::normalize(ball_.pose_)*.5f);
           } else {
 
           }
-          }
-        break;
-        case DEFENDER:{
+          mr_robot.getCommand().print();
         }
-        break;
-        default:
+      }
+      break;
+      default:{
         break;
       }
-      mr_robot.getCommand().print();
-      }
-    }
-    break;
-    case 'S':{
-      for (int i = 0; i < our_robots.size() ; ++i){
-      Robot mr_robot = our_robots.at(i);
-      const int robot_id = our_robots.at(i).getId();
-      if (robot_id == state_.goalie_id_player_){
-        mr_robot.goToAiming(Vec3(-ssl_geometry_.field_length_*0.5, 0.0f, 0.0f), ball_.pose_);
-      } else if (mr_robot.isClosest()) {
-        if (!mr_robot.isAiming(ball_.pose_)) {
-          mr_robot.goToAiming(mr_robot.getPose(), ball_.pose_);
-        } else if (!mr_robot.isAiming(ENEMY_GOAL)) {
-          mr_robot.rotateAround(ball_.pose_, ENEMY_GOAL);
-        } else {
-          mr_robot.goToAiming(ball_.pose_, ENEMY_GOAL);
-          mr_robot.setKick(4.0f);
-        }
-        mr_robot.goToAiming(mr_robot.getPose(), ball_.pose_-util::normalize(ball_.pose_)*.5f);
-        } else {
-
-        }
-        mr_robot.getCommand().print();
-      }
-    }
-    break;
-    default:{
-    break;
-    }
     }
   }
 }
