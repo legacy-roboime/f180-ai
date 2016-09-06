@@ -47,6 +47,6 @@ Vec3 util::rec(const float r, const float theta, const float phi) {
 }
 
 Vec3 util::rec(const Vec3 pol_vec) {
-  const float r = pol_vec.x_, theta = pol_vec.y_, phi=pol_vec.z_;
+  const float r = pol_vec.x_, theta = pol_vec.y_, phi=pol_vec.w_;
   return Vec3(r*cos(theta),r*sin(theta),phi);
 }

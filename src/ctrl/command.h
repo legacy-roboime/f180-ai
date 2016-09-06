@@ -10,6 +10,11 @@ public:
     void print();
     void printerr();
 //private:
+    ///Que louco
+    ///
+    ///muito louco
+    ///
+    ///Eu tambem
     float vt_, vn_, vw_;
     float kick_ , chip_;
     bool dribble_;
