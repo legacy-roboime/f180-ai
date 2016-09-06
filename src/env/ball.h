@@ -3,9 +3,9 @@
 #include "vec3.h"
 
 struct Ball{
-    Vec3 pose_,vel_;
-    Ball() = default; 
-    Ball (Vec3 pose , Vec3 vel):
-        pose_(pose),
-        vel_(vel) {};
+  Vec3 pose_,vel_;
+  Ball() = default;
+  Ball (Vec3 pose , Vec3 vel):
+    pose_(pose),
+    vel_(vel) {};
 };
