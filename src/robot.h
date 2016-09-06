@@ -36,6 +36,7 @@ public:
 
     void goToAiming( Vec3 pose, Vec3 target );
     void rotateAround( Vec3 center , Vec3 target);
+    void rotateAround( Vec3 center , Vec3 target, Vec3 center_speed );
     void setKick( float kick );
     void setDribble( bool dribble );
 private:

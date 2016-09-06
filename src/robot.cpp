@@ -56,3 +56,17 @@ void Robot::rotateAround(Vec3 center, Vec3 target){
     cmd_.vt_ = 0.0f;
     cmd_.vn_ = -cmd_.vw_*radius;
 }
+
+void Robot::rotateAround( Vec3 center , Vec3 target, Vec3 center_speed ){
+  const float radius = sqrt(util::dist2(center, pose_));
+  const float final_angle = util::aim(center, target);
+  const Vec3 transformed_center_speed = Vec3(center_speed.x_*cos(pose_.w_) + center_speed.y_*sin(pose_.w_),center_speed.x_*sin(pose_.w_) - center_speed.y_*cos(pose_.w_), 0.0f);
+  const Vec3 final_pose(pose_.x_+radius*( cos(pose_.w_) - cos(final_angle) ),
+                    pose_.y_+radius*( sin(pose_.w_) - sin(final_angle) ),
+                    final_angle);
+  PID pid(cmd_);
+  pid.calcProportional(pose_, final_pose);
+  cmd_.vt_ = transformed_center_speed.x_;
+  cmd_.vn_ = -cmd_.vw_*radius - transformed_center_speed.y_;
+}
+

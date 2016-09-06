@@ -99,10 +99,10 @@ void Intel::loop(){
         for (int i = 0; i < our_robots.size() ; ++i) {
         Robot mr_robot = our_robots.at(i);
         const int robot_id = our_robots.at(i).getId();
-        if(robot_id == closer_one_id){
+        if(robot_id == closer_one_id && robot_id != state_.goalie_id_player_){
           mr_robot.setStance(ATTACKER);
           mr_robot.setClosest(true);
-        } else if (robot_id == second_closer_id){
+        } else if (robot_id == second_closer_id && robot_id != state_.goalie_id_player_){
           mr_robot.setStance(ATTACKER);
           mr_robot.setClosest(false);
         } else if (robot_id == state_.goalie_id_player_){
@@ -140,7 +140,8 @@ void Intel::loop(){
             mr_robot.goToAiming(Vec3(-ssl_geometry_.field_length_/2+ssl_geometry_.defense_radius_,0,0),Vec3());
           }
           break;
-          default:
+          case NONE:{
+          }
           break;
         }
         mr_robot.getCommand().print();
