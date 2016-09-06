@@ -44,7 +44,7 @@ private:
   Stance stance_;
   int id_;
   bool is_friend_;
-  bool is_closest_; // TODO: has ball algorithm
+  bool is_closest_;
   PID pid_;
   Command cmd_;
   Vec3 pose_,vel_;
