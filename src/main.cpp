@@ -16,6 +16,7 @@
 using namespace std;
 using namespace util;
 
+// Checks version of protocol
 bool VERSION_CHECK(){
     const int compat_version = 1;
     string magic_string;

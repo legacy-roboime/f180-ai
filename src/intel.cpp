@@ -125,7 +125,7 @@ void Intel::loop(){
                 if(!mr_robot.isAiming(ball_.pose_)) {
                   mr_robot.goToAiming(mr_robot.getPose(), ball_.pose_);
               } else if(!mr_robot.isAiming(TARGET)) {
-                  mr_robot.rotateAround(ball_.pose_, TARGET);
+                  mr_robot.rotateAround(ball_.pose_, TARGET, ball_.vel_); //! \bug sometimes stopping while rotating
               } else {
                   mr_robot.goToAiming(ball_.pose_, TARGET);
                   mr_robot.setKick(5.0f);
@@ -138,7 +138,6 @@ void Intel::loop(){
           break;
           case DEFENDER:{
             const float ball_angle = util::aim(OUR_GOAL, ball_.pose_ );
-            cerr << ball_angle*180 << endl;
             mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch_/2+ssl_geometry_.defense_radius_,ball_angle,ball_angle), Vec3(0,0,ball_angle) );
           }
           break;

@@ -26,7 +26,6 @@ float util::dist2(const Vec3 pose1, const Vec3 pose2) {
   return (dx_2+dy_2);
 }
 
-
 float util::norm2(const Vec3 vec){
   return sqrt(vec.x_*vec.x_ + vec.y_*vec.y_);
 }
@@ -47,6 +46,6 @@ Vec3 util::rec(const float r, const float theta, const float phi) {
 }
 
 Vec3 util::rec(const Vec3 pol_vec) {
-  const float r = pol_vec.x_, theta = pol_vec.y_, phi=pol_vec.z_;
+  const float r = pol_vec.x_, theta = pol_vec.y_, phi=pol_vec.w_;
   return Vec3(r*cos(theta),r*sin(theta),phi);
 }

@@ -1,4 +1,5 @@
 #include "robot.h"
+#include "env/utils.h"
 #include <iostream>
 using namespace std;
 
@@ -26,8 +27,7 @@ void Robot::setClosest( bool is_closest ){
     is_closest_ = is_closest;
 }
 
-//TODO: refactor. All we need is the desired pose once we have the angle
-void Robot::goToAiming (Vec3 pose, Vec3 target){
+void Robot::goToAiming (Vec3 const pose, Vec3 const target){
     PID pid(cmd_);
     const float aim = util::aim(pose_ , target);
     pid.calcProportional(pose_, Vec3 (pose.x_, pose.y_ , aim));
@@ -45,7 +45,7 @@ void Robot::setKick(float kick){
     cmd_.dribble_ = false;
 }
 
-void Robot::rotateAround(Vec3 center, Vec3 target){
+void Robot::rotateAround(Vec3 const center, Vec3 const target){
     const float radius = sqrt(util::dist2(center, pose_));
     const float final_angle = util::aim(center, target);
     Vec3 final_pose(pose_.x_+radius*( cos(pose_.w_) - cos(final_angle) ),
@@ -57,7 +57,7 @@ void Robot::rotateAround(Vec3 center, Vec3 target){
     cmd_.vn_ = -cmd_.vw_*radius;
 }
 
-void Robot::rotateAround( Vec3 center , Vec3 target, Vec3 center_speed ){
+void Robot::rotateAround( Vec3  center , Vec3 target, Vec3 center_speed ){
   const float radius = sqrt(util::dist2(center, pose_));
   const float final_angle = util::aim(center, target);
   const Vec3 transformed_center_speed = Vec3(center_speed.x_*cos(pose_.w_) + center_speed.y_*sin(pose_.w_),center_speed.x_*sin(pose_.w_) - center_speed.y_*cos(pose_.w_), 0.0f);

@@ -17,3 +17,4 @@ struct Geometry{
     defense_radius_(p5),
     defense_stretch_(p6) {};
 };
+
