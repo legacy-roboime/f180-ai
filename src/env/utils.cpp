@@ -46,3 +46,9 @@ Vec3 util::normalize(const Vec3 vec){
 Vec3 util::rec(const float r, const float theta, const float phi) {
   return Vec3(r*cos(theta),r*sin(theta),phi);
 }
+
+//Transform from polar coordinates to rectangular coordinates
+Vec3 util::rec(const Vec3 pol_vec) {
+  const float r = pol_vec.x_, theta = pol_vec.y_, phi=pol_vec.z_;
+  return Vec3(r*cos(theta),r*sin(theta),phi);
+}
