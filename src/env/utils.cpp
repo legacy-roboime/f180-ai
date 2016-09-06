@@ -31,15 +31,15 @@ float util::mod(const Vec3 vec){
     return sqrt(vec.x_*vec.x_ + vec.y_*vec.y_);
 }
 
-Vec3 util::normalize(const Vec3 vec){
-    if(fabs(mod(vec))<EPS) return vec;
-    return vec*(1/mod(vec));
-}
-
 float util::aim(const Vec3 shooter, const Vec3 target){
     const float x = target.x_ - shooter.x_;
     const float y = target.y_ - shooter.y_;
     return atan2(y,x);
+}
+
+Vec3 util::normalize(const Vec3 vec){
+    if(fabs(mod(vec))<EPS) return vec;
+    return vec*(1/mod(vec));
 }
 
 //Transform from polar coordinates to rectangular coordinates
