@@ -31,9 +31,9 @@ float util::mod(const Vec3 vec){
   return sqrt(vec.x_*vec.x_ + vec.y_*vec.y_);
 }
 
-float util::aim(const Vec3 shooter, const Vec3 target){
-  const float x = target.x_ - shooter.x_;
-  const float y = target.y_ - shooter.y_;
+float util::aim(const Vec3 source, const Vec3 target){
+  const float x = target.x_ - source.x_;
+  const float y = target.y_ - source.y_;
   return atan2(y,x);
 }
 
