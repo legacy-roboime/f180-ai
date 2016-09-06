@@ -3,12 +3,12 @@
 
 const float EPS = 1e-9;
 
-float util::rad(const float deg) {
-  return (PI*deg/180.0);
+float util::rad(const float ang) {
+  return (PI*ang/180.0);
 }
 
-float util::deg(const float rad) {
-  return (180.0*rad/PI);
+float util::deg(const float ang) {
+  return (180.0*ang/PI);
 }
 
 float util::wrap(const float ang) {
@@ -42,12 +42,10 @@ Vec3 util::normalize(const Vec3 vec){
   return vec*(1/mod(vec));
 }
 
-//Transform from polar coordinates to rectangular coordinates
 Vec3 util::rec(const float r, const float theta, const float phi) {
   return Vec3(r*cos(theta),r*sin(theta),phi);
 }
 
-//Transform from polar coordinates to rectangular coordinates
 Vec3 util::rec(const Vec3 pol_vec) {
   const float r = pol_vec.x_, theta = pol_vec.y_, phi=pol_vec.z_;
   return Vec3(r*cos(theta),r*sin(theta),phi);
