@@ -42,6 +42,7 @@ float util::aim(const Vec3 shooter, const Vec3 target){
     return atan2(y,x);
 }
 
-Vec3 util::rec(const float r, const float theta) {
-  return Vec3(r*cos(theta),r*sin(theta),0);
+//Transform from polar coordinates to rectangular coordinates
+Vec3 util::rec(const float r, const float theta, const float phi) {
+  return Vec3(r*cos(theta),r*sin(theta),phi);
 }

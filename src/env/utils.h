@@ -12,7 +12,8 @@ namespace util{
     float dist2(const Vec3 pose1, const Vec3 pose2) ;
     float aim(const Vec3 shooter, const Vec3 target) ; //TODO:names
     float mod(const Vec3 vec);
-    Vec3 rec(const float r, const float theta);
+    //Transform from polar coordinates to rectangular coordinates
+    Vec3 rec(const float r, const float theta, const float phi);
     Vec3 normalize(const Vec3 vec) ;
 }
 
