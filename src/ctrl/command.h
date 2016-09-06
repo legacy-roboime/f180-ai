@@ -1,6 +1,9 @@
 #pragma once
 #include "../env/vec3.h"
 
+//! Command class holds the output robots
+//! may receive to perform actions.
+
 class Command {
 public:
     Command();
@@ -9,12 +12,7 @@ public:
 
     void print();
     void printerr();
-//private:
-    ///Que louco
-    ///
-    ///muito louco
-    ///
-    ///Eu tambem
+
     float vt_, vn_, vw_;
     float kick_ , chip_;
     bool dribble_;

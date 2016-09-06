@@ -19,3 +19,4 @@ Vec3 Vec3::normalize(){
   if(fabs(sqrt(vec.x_*vec.x_ + vec.y_*vec.y_))<EPS) return Vec3(0.0f, 0.0f ,w_);
   return vec*(1/(sqrt(vec.x_*vec.x_ + vec.y_*vec.y_)));
 }
+
