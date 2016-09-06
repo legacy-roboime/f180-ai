@@ -137,7 +137,9 @@ void Intel::loop(){
           }
           break;
           case DEFENDER:{
-            mr_robot.goToAiming(Vec3(-ssl_geometry_.field_length_/2+ssl_geometry_.defense_radius_,0,0),Vec3());
+            const float ball_angle = util::aim(OUR_GOAL, ball_.pose_ );
+            cerr << ball_angle*180 << endl;
+            mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch_/2+ssl_geometry_.defense_radius_,ball_angle,ball_angle), Vec3(0,0,ball_angle) );
           }
           break;
           case NONE:{
