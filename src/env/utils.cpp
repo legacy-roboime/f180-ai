@@ -27,7 +27,7 @@ float util::dist2(const Vec3 pose1, const Vec3 pose2) {
 }
 
 
-float util::mod(const Vec3 vec){
+float util::norm2(const Vec3 vec){
   return sqrt(vec.x_*vec.x_ + vec.y_*vec.y_);
 }
 
@@ -38,8 +38,8 @@ float util::aim(const Vec3 source, const Vec3 target){
 }
 
 Vec3 util::normalize(const Vec3 vec){
-  if(fabs(mod(vec))<EPS) return vec;
-  return vec*(1/mod(vec));
+  if(fabs(norm2(vec))<EPS) return Vec3();
+  return vec*(1/norm2(vec));
 }
 
 Vec3 util::rec(const float r, const float theta, const float phi) {
