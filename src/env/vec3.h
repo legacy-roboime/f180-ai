@@ -27,13 +27,20 @@ struct Vec3{
   Vec3 operator*(const float val) const { // NOTE: only for coordinates
     return Vec3 ( val*x_, val*y_, w_ );
   }
+  ///2D scalar product between two vectors
+  float operator*(const Vec3& vec) const {
+    return (x_*vec.x_+y_*vec.y_);
+  }
+
   ///Returns vector length
-  float length();
+  float length() const ;
   ///Returns distance to target
-  float dist(const Vec3 target);
+  float dist(const Vec3 target) const ;
   ///Returns square of distance to target
-  float dist2(const Vec3 target);
+  float dist2(const Vec3 target) const ;
+  ///Returns angle between two 2D vectors
+  float ang(const Vec3 vec) const ;
   ///Returns corresponding unit vector
-  Vec3 normalized();
+  Vec3 normalized() const ;
 };
 
