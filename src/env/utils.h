@@ -19,12 +19,12 @@ namespace util{
   ///Returns angle from source to target with x-axis
   float aim(const Vec3 source, const Vec3 target) ; //TODO:names
   ///Returns vector 2D norm
-  float norm2(const Vec3 vec);
+  float norm2(const Vec3 vec) ;
   ///Returns the equivalent unitary vector
   Vec3 normalize(const Vec3 vec) ;
   ///Transforms the vector (r,theta,phi) from polar coordinates to rectangular coordinates
-  Vec3 rec(const float r, const float theta, const float phi);
+  Vec3 rec(const float r, const float theta, const float phi) ;
   ///Transforms the vector pol_vec from polar coordinates to rectangular coordinates
-  Vec3 rec(const Vec3 pol_vec);
+  Vec3 rec(const Vec3 pol_vec) ;
 }
 

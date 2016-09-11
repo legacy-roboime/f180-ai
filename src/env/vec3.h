@@ -40,6 +40,8 @@ struct Vec3{
   float dist2(const Vec3 target) const ;
   ///Returns angle between two 2D vectors
   float ang(const Vec3 vec) const ;
+  ///Receives angle in radians and returns angularly displaced Vec3
+  Vec3 displaced(const float angle) const ;
   ///Returns corresponding unit vector
   Vec3 normalized() const ;
 };

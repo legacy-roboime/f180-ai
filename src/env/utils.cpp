@@ -26,17 +26,17 @@ float util::dist2(const Vec3 pose1, const Vec3 pose2) {
   return (dx_2+dy_2);
 }
 
-float util::norm2(const Vec3 vec){
+float util::norm2(const Vec3 vec) {
   return sqrt(vec.x_*vec.x_ + vec.y_*vec.y_);
 }
 
-float util::aim(const Vec3 source, const Vec3 target){
+float util::aim(const Vec3 source, const Vec3 target) {
   const float x = target.x_ - source.x_;
   const float y = target.y_ - source.y_;
   return atan2(y,x);
 }
 
-Vec3 util::normalize(const Vec3 vec){
+Vec3 util::normalize(const Vec3 vec) {
   if(fabs(norm2(vec))<EPS) return Vec3();
   return vec*(1/norm2(vec));
 }
@@ -49,3 +49,4 @@ Vec3 util::rec(const Vec3 pol_vec) {
   const float r = pol_vec.x_, theta = pol_vec.y_, phi=pol_vec.w_;
   return Vec3(r*cos(theta),r*sin(theta),phi);
 }
+

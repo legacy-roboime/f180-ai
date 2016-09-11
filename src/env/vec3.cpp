@@ -20,11 +20,16 @@ Vec3 Vec3::normalized() const {
   return vec*(1/(sqrt(vec.x_*vec.x_ + vec.y_*vec.y_)));
 }
 
-//Follows the formula cos(angle) = A*B/|A||B|
+// Follows the equation cos(angle) = A*B/|A||B|
 float Vec3::ang(const Vec3 vec2) const {
   const Vec3 vec1 (x_,y_,w_);
   assert(vec1.length()*vec2.length() != 0);
   return acos(vec1*vec2/(vec1.length()*vec2.length()));
 }
 
+Vec3 Vec3::displaced(const float angle) const {
+  const float radius = this->length();
+  const float theta = atan2(y_,x_);
+  return Vec3(radius*cos(angle+theta), radius*sin(angle+theta), w_);
+}
 
