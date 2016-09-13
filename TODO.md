@@ -10,6 +10,7 @@ TODO
     - [ ] Solve sudden stop when rotating large angles (and ball is moving)
     - [ ] Best shooting angle algorithm
 - [ ] Goalie
-    - [ ] Algorithm for minimizing available goal area within defense zone
+    - [x] Algorithm for minimizing available goal area within defense zone
+    - [ ] Algorithm taking into account other robots in the middle (at least defenders)
 - [ ] Defender
     - [x] Set other defenders to stand in formation (across an arc or across tangent line)
