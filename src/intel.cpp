@@ -1,4 +1,7 @@
 #include "intel.h"
+#include <cmath>
+#include <iostream>
+#include <vector>
 #define TARGET ENEMY_GOAL
 using namespace std;
 
@@ -97,7 +100,6 @@ void Intel::loop(){
           }
 
     int def_counter = 0;
-    cerr << state_.referee_state_ << endl;
     for(int i = 0 ; i < our_robots.size(); ++i){
     Robot mr_robot = our_robots.at(i);
     const int robot_id = our_robots.at(i).getId();
@@ -253,7 +255,7 @@ void Intel::loop(){
             if(mr_robot.isClosest()){
               mr_robot.goToAiming(ball_.pose_ - radial.normalized()*0.59f, ball_.pose_);
             } else {
-              mr_robot.goToAiming(ball_.pose_ - radial.normalized().displaced(10*PI/180.0f)*0.059, ball_.pose_);
+
             }
           }
           break;
@@ -280,8 +282,64 @@ void Intel::loop(){
       case 'Y': // OPPONENT_PENALTY
       break;
     }
+    if(mr_robot.getStance() == GOALIE){
+      cerr << goalieCost(ball_.pose_, mr_robot.getPose()) << endl;
+    }
     mr_robot.getCommand().print();
     }
   }
+}
+
+// goalieCost reckons the goal vertical extension not covered by the goalie.
+// This function is used to determine where the goalie must be to cover a larger area of the goal.
+float Intel::goalieCost( const Vec3 ball_pos, const Vec3 goalie_pos ){
+  const float error = 0.01f; // degrees precision
+  const float theta = atan2((ball_pos.y-goalie_pos.y), (ball_pos.x-goalie_pos.x));
+  const float alpha = asin(0.09f/ball_pos.dist(goalie_pos));
+  float y1, y2;
+#if 0
+  if (((theta+alpha)>=((90.0f+error)*PI/180.0f)) && ((theta+alpha)<=((90.0f-error)*PI/180.0f))){ // Unoptimal
+    y1 = ball_pos.y - tan (theta+alpha)*(ssl_geometry_.field_length_*0.5f+goalie_pos.x));
+  } else if (((theta+alpha) >= ((-90.0f+error)*PI/180.0f)) && ((theta+alpha)<=((-90.0f-error)*PI/180.0f))){
+    y1 = ball_pos.y - tan (theta+alpha)*(ssl_geometry_.field_length_*0.5f + goalie_pos.x);
+  } else {
+    if ((theta+alpha)>0){
+      y1 = -1e20;
+    } else {
+      y1 = 1e20;
+    }
+  }
+#else
+  y1 = ball_pos.y - tan(theta+alpha)*(ssl_geometry_.field_length_*0.5f + ball_pos.x);
+#endif
+#if 0
+  if ((theta-alpha)>=((90.0f+error)*PI/180.0f) && ((theta-alpha)<=((90.0f-error)*PI/180.0f))){ // Unoptimal
+    y2 = ball_pos.y - tan (theta-alpha)*(ssl_geometry_.field_length_*0.5f + goalie_pos.x);
+  } else if ((theta-alpha)>=(-90.0f+error)*PI/180.0f && (theta-alpha)<=(-90.0f-error)*PI/180.0f){
+    y2 = ball_pos.y - tan (theta-alpha)*(ssl_geometry_.field_length_*0.5f + goalie_pos.x);
+  } else {
+    y2 = -1e20;
+    if (theta-alpha>0){
+      y2 = -1e20;
+    } else {
+      y2 = 1e20;
+    }
+  }
+#else
+  y2 = ball_pos.y - tan (theta-alpha)*(ssl_geometry_.field_length_*0.5f + ball_pos.x);
+#endif
+  if (y1<y2){
+    const float aux = y1;
+    y1 = y2;
+    y2 = aux;
+  }
+  if (y1 > ssl_geometry_.goal_width_*0.5){
+    y1 = ssl_geometry_.defense_stretch_*0.5;
+  }
+  if (y2 < -ssl_geometry_.goal_width_*0.5){
+    y2 = -ssl_geometry_.defense_stretch_*0.5;
+  }
+  cerr << ssl_geometry_.defense_stretch_ << endl;
+  return (ssl_geometry_.goal_width_-(y1-y2));
 }
 

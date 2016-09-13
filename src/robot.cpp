@@ -1,5 +1,6 @@
 #include "robot.h"
 #include "env/utils.h"
+#include <cmath>
 #include <iostream>
 using namespace std;
 
