@@ -16,23 +16,23 @@ float util::wrap(const float ang) {
 }
 
 float util::dist(const Vec3 pose1, const Vec3 pose2) {
-  const float dx_2 = (pose1.x_-pose2.x_)*(pose1.x_-pose2.x_);
-  const float dy_2 = (pose1.y_-pose2.y_)*(pose1.y_-pose2.y_);
+  const float dx_2 = (pose1.x-pose2.x)*(pose1.x-pose2.x);
+  const float dy_2 = (pose1.y-pose2.y)*(pose1.y-pose2.y);
   return sqrt(dx_2+dy_2);
 }
 float util::dist2(const Vec3 pose1, const Vec3 pose2) {
-  const float dx_2 = (pose1.x_-pose2.x_)*(pose1.x_-pose2.x_);
-  const float dy_2 = (pose1.y_-pose2.y_)*(pose1.y_-pose2.y_);
+  const float dx_2 = (pose1.x-pose2.x)*(pose1.x-pose2.x);
+  const float dy_2 = (pose1.y-pose2.y)*(pose1.y-pose2.y);
   return (dx_2+dy_2);
 }
 
 float util::norm2(const Vec3 vec) {
-  return sqrt(vec.x_*vec.x_ + vec.y_*vec.y_);
+  return sqrt(vec.x*vec.x + vec.y*vec.y);
 }
 
 float util::aim(const Vec3 source, const Vec3 target) {
-  const float x = target.x_ - source.x_;
-  const float y = target.y_ - source.y_;
+  const float x = target.x - source.x;
+  const float y = target.y - source.y;
   return atan2(y,x);
 }
 
@@ -46,7 +46,7 @@ Vec3 util::rec(const float r, const float theta, const float phi) {
 }
 
 Vec3 util::rec(const Vec3 pol_vec) {
-  const float r = pol_vec.x_, theta = pol_vec.y_, phi=pol_vec.w_;
+  const float r = pol_vec.x, theta = pol_vec.y, phi=pol_vec.w;
   return Vec3(r*cos(theta),r*sin(theta),phi);
 }
 

@@ -11,7 +11,7 @@
 enum Stance{
   ATTACKER,
   DEFENDER,
-  NONE
+  GOALIE
 };
 
 class Robot{
@@ -27,7 +27,7 @@ public:
   bool isFriend() const { return is_friend_;  }
   Stance getStance() const { return stance_;  }
   bool isClosest() const { return is_closest_; }
-  bool isAiming( const Vec3 pose ) const; //NOTE: copy w_ is useless
+  bool isAiming( const Vec3 pose ) const; //NOTE: copy w is useless
 
   void setId( int id );
   void setPose( Vec3 pose );

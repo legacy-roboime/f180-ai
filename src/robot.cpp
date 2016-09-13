@@ -5,11 +5,11 @@ using namespace std;
 
 Robot::Robot() { //TODO: review setCommandPtr in this;
     pid_.setCommandPtr(cmd_);
-    stance_ = NONE;
+    stance_ = GOALIE;
 }
 
 Robot::Robot(Vec3 pose, Vec3 vel, int id, bool is_friend):
-		id_(id), vel_(vel), pose_(pose), is_friend_(is_friend), stance_(NONE)
+		id_(id), vel_(vel), pose_(pose), is_friend_(is_friend), stance_(GOALIE)
         { pid_.setCommandPtr(cmd_); } //TODO: debug
 
 void Robot::setId( int id ){
@@ -30,11 +30,11 @@ void Robot::setClosest( bool is_closest ){
 void Robot::goToAiming (Vec3 const pose, Vec3 const target){
     PID pid(cmd_);
     const float aim = util::aim(pose_ , target);
-    pid.calcProportional(pose_, Vec3 (pose.x_, pose.y_ , aim));
+    pid.calcProportional(pose_, Vec3 (pose.x, pose.y , aim));
 }
 
 bool Robot::isAiming(const Vec3 target) const {
-    const float current_angle = util::wrap(pose_.w_);
+    const float current_angle = util::wrap(pose_.w);
     const float aim = util::aim(pose_, target);
     const float diff = fabs(current_angle-aim);
     return diff <= PI/180.0f;
@@ -48,8 +48,8 @@ void Robot::setKick(float kick){
 void Robot::rotateAround(Vec3 const center, Vec3 const target){
     const float radius = sqrt(util::dist2(center, pose_));
     const float final_angle = util::aim(center, target);
-    Vec3 final_pose(pose_.x_+radius*( cos(pose_.w_) - cos(final_angle) ),
-                    pose_.y_+radius*( sin(pose_.w_) - sin(final_angle) ),
+    Vec3 final_pose(pose_.x+radius*( cos(pose_.w) - cos(final_angle) ),
+                    pose_.y+radius*( sin(pose_.w) - sin(final_angle) ),
                     final_angle);
     PID pid(cmd_);
     pid.calcProportional(pose_, final_pose);
@@ -60,13 +60,13 @@ void Robot::rotateAround(Vec3 const center, Vec3 const target){
 void Robot::rotateAround( Vec3  center , Vec3 target, Vec3 center_speed ){
   const float radius = sqrt(util::dist2(center, pose_));
   const float final_angle = util::aim(center, target);
-  const Vec3 transformed_center_speed = Vec3(center_speed.x_*cos(pose_.w_) + center_speed.y_*sin(pose_.w_),center_speed.x_*sin(pose_.w_) - center_speed.y_*cos(pose_.w_), 0.0f);
-  const Vec3 final_pose(pose_.x_+radius*( cos(pose_.w_) - cos(final_angle) ),
-                    pose_.y_+radius*( sin(pose_.w_) - sin(final_angle) ),
+  const Vec3 transformed_center_speed = Vec3(center_speed.x*cos(pose_.w) + center_speed.y*sin(pose_.w),center_speed.x*sin(pose_.w) - center_speed.y*cos(pose_.w), 0.0f);
+  const Vec3 final_pose(pose_.x+radius*( cos(pose_.w) - cos(final_angle) ),
+                    pose_.y+radius*( sin(pose_.w) - sin(final_angle) ),
                     final_angle);
   PID pid(cmd_);
   pid.calcProportional(pose_, final_pose);
-  cmd_.vt_ = transformed_center_speed.x_;
-  cmd_.vn_ = -cmd_.vw_*radius - transformed_center_speed.y_;
+  cmd_.vt_ = transformed_center_speed.x;
+  cmd_.vn_ = -cmd_.vw_*radius - transformed_center_speed.y;
 }
 

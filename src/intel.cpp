@@ -98,7 +98,7 @@ void Intel::loop(){
         Robot mr_robot = our_robots.at(i);
         const int robot_id = our_robots.at(i).getId();
         if (robot_id == state_.goalie_id_player_){
-          mr_robot.setStance(NONE);
+          mr_robot.setStance(GOALIE);
         } else if(robot_id == closer_one_id){
           mr_robot.setStance(ATTACKER);
           mr_robot.setClosest(true);
@@ -137,7 +137,7 @@ void Intel::loop(){
             def_counter ++;
           }
           break;
-          case NONE:{
+          case GOALIE:{
             mr_robot.goToAiming( OUR_GOAL, ball_.pose_ );
           }
           break;
@@ -177,7 +177,7 @@ void Intel::loop(){
         Robot mr_robot = our_robots.at(i);
         const int robot_id = our_robots.at(i).getId();
         if (robot_id == state_.goalie_id_player_){
-          mr_robot.setStance(NONE);
+          mr_robot.setStance(GOALIE);
         } else if(robot_id == closer_one_id){
           mr_robot.setStance(ATTACKER);
           mr_robot.setClosest(true);
@@ -216,7 +216,7 @@ void Intel::loop(){
             def_counter ++;
           }
           break;
-          case NONE:{
+          case GOALIE:{
             mr_robot.goToAiming( OUR_GOAL, ball_.pose_ );
           }
           break;
@@ -231,7 +231,7 @@ void Intel::loop(){
         Robot mr_robot = our_robots.at(i);
         const int robot_id = our_robots.at(i).getId();
         if (robot_id == state_.goalie_id_player_){
-          mr_robot.setStance(NONE);
+          mr_robot.setStance(GOALIE);
         } else if(robot_id == closer_one_id){
           mr_robot.setStance(ATTACKER);
           mr_robot.setClosest(true);
@@ -270,7 +270,7 @@ void Intel::loop(){
             def_counter ++;
           }
           break;
-          case NONE:{
+          case GOALIE:{
             mr_robot.goToAiming( OUR_GOAL, ball_.pose_ );
           }
           break;
@@ -284,7 +284,7 @@ void Intel::loop(){
         Robot mr_robot = our_robots.at(i);
         const int robot_id = our_robots.at(i).getId();
         if (robot_id == state_.goalie_id_player_){
-          mr_robot.setStance(NONE);
+          mr_robot.setStance(GOALIE);
         } else if(robot_id == closer_one_id){
           mr_robot.setStance(ATTACKER);
           mr_robot.setClosest(true);
@@ -297,7 +297,7 @@ void Intel::loop(){
         switch(mr_robot.getStance()){
           case ATTACKER:{
             if(mr_robot.isClosest()){
-              const Vec3 radial(ball_.pose_.x_+ssl_geometry_.field_length_*0.5 , ball_.pose_.y_, 0.0f);
+              const Vec3 radial(ball_.pose_.x+ssl_geometry_.field_length_*0.5 , ball_.pose_.y, 0.0f);
               mr_robot.goToAiming(ball_.pose_ - radial.normalized()*0.59f, ball_.pose_);
             } else {
               //set backer strat
@@ -312,7 +312,7 @@ void Intel::loop(){
             def_counter ++;
           }
           break;
-          case NONE:{
+          case GOALIE:{
             mr_robot.goToAiming( OUR_GOAL, ball_.pose_ );
           }
           break;

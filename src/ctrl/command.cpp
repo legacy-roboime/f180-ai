@@ -21,9 +21,9 @@ Command::Command(float vt, float vn, float vw, float kick, float chip, bool drib
     dribble_ = dribble;
 }
 Command::Command(Vec3 vel, float kick, float chip, bool dribble){
-    vt_ = vel.x_;
-    vn_ = vel.y_;
-    vw_ = vel.w_;
+    vt_ = vel.x;
+    vn_ = vel.y;
+    vw_ = vel.w;
     chip_ = chip;
     dribble_ = dribble;
 }

@@ -8,28 +8,28 @@
 //! one's coordinate in a 2D space.
 
 struct Vec3{
-  float x_,y_,w_;
+  float x,y,w;
 
   ///Constructor
   Vec3(float x, float y, float w):
-    x_(x), y_(y), w_(w) {};
+    x(x), y(y), w(w) {};
   ///Default constructor
-  Vec3() : x_(0.0f), y_(0.0f), w_(0.0f){};
+  Vec3() : x(0.0f), y(0.0f), w(0.0f){};
   ///Adds two vectors
   Vec3 operator+(const Vec3& vec) const {
-    return Vec3( x_ + vec.x_, y_ + vec.y_, w_ );
+    return Vec3( x + vec.x, y + vec.y, w );
   }
   ///Subtracts two vectors
   Vec3 operator-(const Vec3& vec) const {
-    return Vec3( x_ - vec.x_, y_ - vec.y_, w_ );
+    return Vec3( x - vec.x, y - vec.y, w );
   }
   ///Multiplies coordinates by a scalar
   Vec3 operator*(const float val) const { // NOTE: only for coordinates
-    return Vec3 ( val*x_, val*y_, w_ );
+    return Vec3 ( val*x, val*y, w );
   }
   ///2D scalar product between two vectors
   float operator*(const Vec3& vec) const {
-    return (x_*vec.x_+y_*vec.y_);
+    return (x*vec.x+y*vec.y);
   }
 
   ///Returns vector length
