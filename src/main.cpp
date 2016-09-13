@@ -14,7 +14,6 @@
 #include "ctrl/pid.h"
 
 using namespace std;
-using namespace util;
 
 // Checks version of protocol
 bool VERSION_CHECK(){

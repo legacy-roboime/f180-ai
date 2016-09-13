@@ -11,6 +11,9 @@
 //! controls in a certain command. Currently this class specificly applies
 //! position control.
 
+const float PL = 1.30f;
+const float PW = 1.80f;
+
 class PID{
 public:
     PID() = default;
@@ -19,7 +22,5 @@ public:
     void setCommandPtr(Command& cmd);
     void calcProportional(const Vec3 pose_now, const Vec3 pose_then);
 private:
-    const float PL = 1.30f; //TODO: friendly names, maybe?
-    const float PW = 1.80f;
     Command* cmd_;
 };
