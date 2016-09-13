@@ -1,9 +1,11 @@
 MAIN = nu-intel
 CLIFLAGS = ./$(MAIN)
-GUIFLAGS = --blue=./$(MAIN) -vff
-#CXX = clang++-3.5 -std=c++11
+#GUIFLAGS for real robots
+#GUIFLAGS = --blue=./$(MAIN) -vvpl --real
+GUIFLAGS = --blue=./$(MAIN) --yellow=./demo -vvf
+CXX = clang++-3.5 -std=c++11
 #CXX = clang++ -std=c++11
-CXX = g++ -std=c++11
+#CXX = g++ -std=c++11
 SRC := $(shell find -name '*.cpp')
 VPATH = amb
 
