@@ -146,7 +146,8 @@ void Intel::loop(){
           }
           break;
           case GOALIE:{
-            mr_robot.goToAiming( OUR_GOAL, ball_.pose_ );
+            Vec3 goalie_pos = calcMinCost(ball_.pose_);
+            mr_robot.goToAiming( goalie_pos, ball_.pose_ );
           }
           break;
         }
@@ -204,7 +205,8 @@ void Intel::loop(){
           }
           break;
           case GOALIE:{
-            mr_robot.goToAiming( OUR_GOAL, ball_.pose_ );
+            Vec3 goalie_pos = calcMinCost(ball_.pose_);
+            mr_robot.goToAiming( goalie_pos, ball_.pose_ );
           }
           break;
         }
@@ -242,7 +244,8 @@ void Intel::loop(){
           }
           break;
           case GOALIE:{
-            mr_robot.goToAiming( OUR_GOAL, ball_.pose_ );
+            Vec3 goalie_pos = calcMinCost(ball_.pose_);
+            mr_robot.goToAiming( goalie_pos, ball_.pose_ );
           }
           break;
         }
@@ -268,7 +271,8 @@ void Intel::loop(){
           }
           break;
           case GOALIE:{
-            mr_robot.goToAiming( OUR_GOAL, ball_.pose_ );
+            Vec3 goalie_pos = calcMinCost(ball_.pose_);
+            mr_robot.goToAiming( goalie_pos, ball_.pose_ );
           }
           break;
         }
@@ -281,9 +285,6 @@ void Intel::loop(){
       case 'y': // PENALTY
       case 'Y': // OPPONENT_PENALTY
       break;
-    }
-    if(mr_robot.getStance() == GOALIE){
-      cerr << goalieCost(ball_.pose_, mr_robot.getPose()) << endl;
     }
     mr_robot.getCommand().print();
     }
@@ -339,7 +340,31 @@ float Intel::goalieCost( const Vec3 ball_pos, const Vec3 goalie_pos ){
   if (y2 < -ssl_geometry_.goal_width_*0.5){
     y2 = -ssl_geometry_.defense_stretch_*0.5;
   }
-  cerr << ssl_geometry_.defense_stretch_ << endl;
   return (ssl_geometry_.goal_width_-(y1-y2));
+}
+
+// This function returns a point with minimal goalie cost value:
+Vec3 Intel::calcMinCost(const Vec3 ball_pos){
+  const float x_precision = 0.01;
+  const float y_precision = 0.01;
+  float min_val = 1e20;
+  float min_x, min_y;
+  float x,y;
+  x = y = 0;
+  const float radius = ssl_geometry_.defense_radius_-0.09f;
+  for (int i = 0 ; x < (ssl_geometry_.defense_radius_-0.09f) ; ++i){
+    y = 0.5f*(ssl_geometry_.defense_stretch_)+ radius*sin(acos(x/radius));
+    for (int j = 0 ; y > -(0.5f*ssl_geometry_.defense_stretch_ + radius*sin(acos(x/radius))); ++j){
+      const float current_g = goalieCost(ball_pos,Vec3(x-0.5f*ssl_geometry_.field_length_,y,0.0f));
+      if (current_g < min_val){
+        min_val = current_g;
+        min_x = x;
+        min_y = y;
+      }
+      y-=y_precision*j;
+    }
+    x+=x_precision*i;
+  }
+  return Vec3(-0.5f*ssl_geometry_.field_length_+min_x, min_y , 0.0f);
 }
 

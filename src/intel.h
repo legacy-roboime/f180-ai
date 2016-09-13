@@ -22,6 +22,7 @@ public:
   void loop();
 
   float goalieCost( const Vec3 ball_pos, const Vec3 goalie_pos );
+  Vec3 calcMinCost ( const Vec3 ball_pos );
 
   Geometry getGeometry() const { return ssl_geometry_; }
   State getState() const { return state_; }
@@ -29,6 +30,7 @@ private:
   Geometry ssl_geometry_;
   State state_;
   Ball ball_;
+  float d_t;
 };
 
 // Important spots in the field further defined once we get the
