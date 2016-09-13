@@ -29,13 +29,13 @@ void Intel::stateIO(){
   int     counter;
   float   timestamp;
   char    referee_state;
-  float   referee_time_left;
+  int     referee_more_info;
   int     score_player, score_opponent;
   int     goalie_id_player, goalie_id_opponent;
 
   cin >> counter
     >> timestamp
-    >> referee_state >> referee_time_left
+    >> referee_state >> referee_more_info
     >> score_player >> score_opponent
     >> goalie_id_player >> goalie_id_opponent;
 
@@ -43,7 +43,7 @@ void Intel::stateIO(){
     counter,
     timestamp,
     referee_state,
-    referee_time_left,
+    referee_more_info,
     score_player, score_opponent,
     goalie_id_player,
     goalie_id_opponent);
