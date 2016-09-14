@@ -97,8 +97,7 @@ void Intel::loop(){
     for (int i = 0; i < our_robots.size() ; ++i) {
       Robot mr_robot = our_robots.at(i);
       const int robot_id = our_robots.at(i).getId();
-          }
-
+    }
     int def_counter = 0;
     for(int i = 0 ; i < our_robots.size(); ++i){
     Robot mr_robot = our_robots.at(i);
@@ -154,22 +153,8 @@ void Intel::loop(){
       }
       break;
       case 'S':{
-        if (robot_id == state_.goalie_id_player_){
-          mr_robot.goToAiming(Vec3(-ssl_geometry_.field_length_*0.5, 0.0f, 0.0f), ball_.pose_);
-        } else if (mr_robot.isClosest()) {
-          if (!mr_robot.isAiming(ball_.pose_)) {
-            mr_robot.goToAiming(mr_robot.getPose(), ball_.pose_);
-          } else if (!mr_robot.isAiming(ENEMY_GOAL)) {
-            mr_robot.rotateAround(ball_.pose_, ENEMY_GOAL);
-          } else {
-            mr_robot.goToAiming(ball_.pose_, ENEMY_GOAL);
-            mr_robot.setKick(4.0f);
-          }
-          mr_robot.goToAiming(mr_robot.getPose(), ball_.pose_-ball_.pose_.normalized()*0.5f);
-          } else {
 
-          }
-      }
+               }
       break;
       case 'A': // AVOID
       case 'p': // PRE_KICKOFF
@@ -294,41 +279,11 @@ void Intel::loop(){
 // goalieCost reckons the goal vertical extension not covered by the goalie.
 // This function is used to determine where the goalie must be to cover a larger area of the goal.
 float Intel::goalieCost( const Vec3 ball_pos, const Vec3 goalie_pos ){
-  const float error = 0.01f; // degrees precision
   const float theta = atan2((ball_pos.y-goalie_pos.y), (ball_pos.x-goalie_pos.x));
   const float alpha = asin(0.09f/ball_pos.dist(goalie_pos));
   float y1, y2;
-#if 0
-  if (((theta+alpha)>=((90.0f+error)*PI/180.0f)) && ((theta+alpha)<=((90.0f-error)*PI/180.0f))){ // Unoptimal
-    y1 = ball_pos.y - tan (theta+alpha)*(ssl_geometry_.field_length_*0.5f+goalie_pos.x));
-  } else if (((theta+alpha) >= ((-90.0f+error)*PI/180.0f)) && ((theta+alpha)<=((-90.0f-error)*PI/180.0f))){
-    y1 = ball_pos.y - tan (theta+alpha)*(ssl_geometry_.field_length_*0.5f + goalie_pos.x);
-  } else {
-    if ((theta+alpha)>0){
-      y1 = -1e20;
-    } else {
-      y1 = 1e20;
-    }
-  }
-#else
   y1 = ball_pos.y - tan(theta+alpha)*(ssl_geometry_.field_length_*0.5f + ball_pos.x);
-#endif
-#if 0
-  if ((theta-alpha)>=((90.0f+error)*PI/180.0f) && ((theta-alpha)<=((90.0f-error)*PI/180.0f))){ // Unoptimal
-    y2 = ball_pos.y - tan (theta-alpha)*(ssl_geometry_.field_length_*0.5f + goalie_pos.x);
-  } else if ((theta-alpha)>=(-90.0f+error)*PI/180.0f && (theta-alpha)<=(-90.0f-error)*PI/180.0f){
-    y2 = ball_pos.y - tan (theta-alpha)*(ssl_geometry_.field_length_*0.5f + goalie_pos.x);
-  } else {
-    y2 = -1e20;
-    if (theta-alpha>0){
-      y2 = -1e20;
-    } else {
-      y2 = 1e20;
-    }
-  }
-#else
-  y2 = ball_pos.y - tan (theta-alpha)*(ssl_geometry_.field_length_*0.5f + ball_pos.x);
-#endif
+  y2 = ball_pos.y - tan(theta-alpha)*(ssl_geometry_.field_length_*0.5f + ball_pos.x);
   if (y1<y2){
     const float aux = y1;
     y1 = y2;
@@ -345,25 +300,25 @@ float Intel::goalieCost( const Vec3 ball_pos, const Vec3 goalie_pos ){
 
 // This function returns a point with minimal goalie cost value:
 Vec3 Intel::calcMinCost(const Vec3 ball_pos){
-  const float x_precision = 0.01;
-  const float y_precision = 0.01;
+  const float x_precision = 0.02;
+  const float y_precision = 0.02;
   float min_val = 1e20;
   float min_x, min_y;
   float x,y;
   x = y = 0;
   const float radius = ssl_geometry_.defense_radius_-0.09f;
-  for (int i = 0 ; x < (ssl_geometry_.defense_radius_-0.09f) ; ++i){
-    y = 0.5f*(ssl_geometry_.defense_stretch_)+ radius*sin(acos(x/radius));
-    for (int j = 0 ; y > -(0.5f*ssl_geometry_.defense_stretch_ + radius*sin(acos(x/radius))); ++j){
+  for (int i = 1 ; x < (ssl_geometry_.defense_radius_-0.09f) ; ++i){
+    y = 0.5f*(ssl_geometry_.defense_stretch_) + radius*sin(acos(x/radius));
+    for (int j = 1 ; y > -(0.5f*ssl_geometry_.defense_stretch_ + radius*sin(acos(x/radius))); ++j){
       const float current_g = goalieCost(ball_pos,Vec3(x-0.5f*ssl_geometry_.field_length_,y,0.0f));
       if (current_g < min_val){
         min_val = current_g;
         min_x = x;
         min_y = y;
       }
-      y-=y_precision*j;
+      y=0.5f*ssl_geometry_.defense_stretch_+radius*sin(acos(x/radius)) - y_precision*j;
     }
-    x+=x_precision*i;
+    x=x_precision*i;
   }
   return Vec3(-0.5f*ssl_geometry_.field_length_+min_x, min_y , 0.0f);
 }
