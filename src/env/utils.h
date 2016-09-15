@@ -6,6 +6,8 @@
 
 ///Utility functions
 namespace util{
+  ///Clamps float between min and max
+  float clamp(float value, const float min, const float max);
   ///Converts angle from degrees to radians
   float rad(const float ang) ;
   ///Converts angle from radians to degrees

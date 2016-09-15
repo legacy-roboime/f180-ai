@@ -1,7 +1,12 @@
 #include "utils.h"
 #include <cmath>
+#include <algorithm>
 
 const float EPS = 1e-9;
+
+float util::clamp(float value, const float min, const float max) {
+  return std::min(max, std::max(value,min));
+}
 
 float util::rad(const float ang) {
   return (PI*ang/180.0);
