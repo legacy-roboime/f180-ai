@@ -255,7 +255,6 @@ void Intel::loop(){
           }
           break;
         }
-      }
       break;
       case 'I':{ // OPPONENT_INDIRECT
         switch(mr_robot.getStance()){
@@ -264,7 +263,6 @@ void Intel::loop(){
             if(mr_robot.isClosest()){
               mr_robot.goToAiming(ball_.pose_ - radial.normalized()*0.59f, ball_.pose_);
             } else {
-
               mr_robot.goToAiming(ENEMY_GOAL, Vec3());
             }
           }
