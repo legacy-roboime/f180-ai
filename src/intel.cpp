@@ -2,7 +2,8 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
-#define TARGET ENEMY_GOAL
+#include <algorithm>
+#define TARGET OUR_GOAL
 using namespace std;
 
 void Intel::geometryInput(){
@@ -66,8 +67,10 @@ void Intel::loop(){
     cin >> robot_count_player;
     int closer_one_id;
     int second_closer_id;
+    int third_closer_id;
     float min_dist = 1e99;
     float min2_dist = 1e99;
+    float min3_dist = 1e99;
     for (int i = 0; i < robot_count_player; ++i) {
       int robot_id;
       float robot_x, robot_y, robot_w, robot_vx, robot_vy, robot_vw;
@@ -81,6 +84,9 @@ void Intel::loop(){
       } else if (current_dist < min2_dist){
         min2_dist = current_dist;
         second_closer_id = robot_id;
+      } else if (current_dist < min3_dist){
+        min3_dist = current_dist;
+        third_closer_id = robot_id;
       }
     }
     int robot_count_opponent;
@@ -102,6 +108,7 @@ void Intel::loop(){
     for(int i = 0 ; i < our_robots.size(); ++i){
     Robot mr_robot = our_robots.at(i);
     const int robot_id = our_robots.at(i).getId();
+    if (!(state_.goalie_id_player_ == closer_one_id)){
     if (robot_id == state_.goalie_id_player_){
       mr_robot.setStance(GOALIE);
     } else if(robot_id == closer_one_id){
@@ -112,6 +119,19 @@ void Intel::loop(){
       mr_robot.setClosest(false);
     } else {
        mr_robot.setStance(DEFENDER);
+    }
+    } else {
+      if (robot_id == state_.goalie_id_player_){
+      mr_robot.setStance(GOALIE);
+    } else if(robot_id == second_closer_id){
+      mr_robot.setStance(ATTACKER);
+      mr_robot.setClosest(true);
+    } else if (robot_id == third_closer_id){
+      mr_robot.setStance(ATTACKER);
+      mr_robot.setClosest(false);
+    } else {
+       mr_robot.setStance(DEFENDER);
+    }
     }
     switch(state_.referee_state_){
       case 'N':{
@@ -132,16 +152,16 @@ void Intel::loop(){
                 }
               }
             } else {
-              //set backer strat
+              mr_robot.goToAiming(ENEMY_GOAL, Vec3());
             }
           }
           break;
           case DEFENDER:{
-            const float ball_angle = util::aim(OUR_GOAL, ball_.pose_ );
+           /* const float ball_angle = util::aim(OUR_GOAL, ball_.pose_ );
             if( def_counter == 0 ) mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch_/2+ssl_geometry_.defense_radius_, ball_angle,ball_angle), Vec3(0,0,ball_angle) );
             else if (def_counter == 1) mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch_/2+ssl_geometry_.defense_radius_, ball_angle + (10.0f*PI/180) , ball_angle ), Vec3(0,0,ball_angle) );
             else mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch_/2+ssl_geometry_.defense_radius_, ball_angle - (10.0f*PI/180) , ball_angle ), Vec3(0,0,ball_angle) );
-            def_counter ++;
+            def_counter ++;*/ mr_robot.goToAiming(ENEMY_GOAL, Vec3());
           }
           break;
           case GOALIE:{
@@ -173,20 +193,21 @@ void Intel::loop(){
                   mr_robot.rotateAround(ball_.pose_, TARGET, ball_.vel_); //! \bug sometimes stopping while rotating
               } else {
                   mr_robot.goToAiming(ball_.pose_, TARGET);
-                  mr_robot.setKick(5.0f);
+                  mr_robot.setKick(6.0f);
                 }
               }
             } else {
               //set backer strat
+              mr_robot.goToAiming(ENEMY_GOAL, Vec3());
             }
           }
           break;
           case DEFENDER:{
-            const float ball_angle = util::aim(OUR_GOAL, ball_.pose_ );
+           /* const float ball_angle = util::aim(OUR_GOAL, ball_.pose_ );
             if( def_counter == 0 ) mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch_/2+ssl_geometry_.defense_radius_, ball_angle,ball_angle), Vec3(0,0,ball_angle) );
             else if (def_counter == 1) mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch_/2+ssl_geometry_.defense_radius_, ball_angle + (10.0f*PI/180) , ball_angle ), Vec3(0,0,ball_angle) );
             else mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch_/2+ssl_geometry_.defense_radius_, ball_angle - (10.0f*PI/180) , ball_angle ), Vec3(0,0,ball_angle) );
-            def_counter ++;
+            def_counter ++;*/ mr_robot.goToAiming(ENEMY_GOAL, Vec3());
           }
           break;
           case GOALIE:{
@@ -216,17 +237,17 @@ void Intel::loop(){
                 }
               }
             } else {
-              //set backer strat
+              mr_robot.goToAiming(ENEMY_GOAL, Vec3());
             }
           }
           break;
           case DEFENDER:{
-            const float ball_angle = util::aim(OUR_GOAL, ball_.pose_ );
+          /*  const float ball_angle = util::aim(OUR_GOAL, ball_.pose_ );
             if( def_counter == 0 ) mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch_/2+ssl_geometry_.defense_radius_, ball_angle,ball_angle), Vec3(0,0,ball_angle) );
             else if (def_counter == 1) mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch_/2+ssl_geometry_.defense_radius_, ball_angle + (10.0f*PI/180) , ball_angle ), Vec3(0,0,ball_angle) );
             else mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch_/2+ssl_geometry_.defense_radius_, ball_angle - (10.0f*PI/180) , ball_angle ), Vec3(0,0,ball_angle) );
             def_counter ++;
-          }
+          }*/ mr_robot.goToAiming(ENEMY_GOAL, Vec3());}
           break;
           case GOALIE:{
             Vec3 goalie_pos = calcMinCost(ball_.pose_);
@@ -244,15 +265,17 @@ void Intel::loop(){
               mr_robot.goToAiming(ball_.pose_ - radial.normalized()*0.59f, ball_.pose_);
             } else {
 
+              mr_robot.goToAiming(ENEMY_GOAL, Vec3());
             }
           }
           break;
           case DEFENDER:{
-            const float ball_angle = util::aim(OUR_GOAL, ball_.pose_ );
+            /*const float ball_angle = util::aim(OUR_GOAL, ball_.pose_ );
             if( def_counter == 0 ) mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch_/2+ssl_geometry_.defense_radius_, ball_angle,ball_angle), Vec3(0,0,ball_angle) );
             else if (def_counter == 1) mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch_/2+ssl_geometry_.defense_radius_, ball_angle + (10.0f*PI/180) , ball_angle ), Vec3(0,0,ball_angle) );
             else mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch_/2+ssl_geometry_.defense_radius_, ball_angle - (10.0f*PI/180) , ball_angle ), Vec3(0,0,ball_angle) );
             def_counter ++;
+            */mr_robot.goToAiming(ENEMY_GOAL, Vec3());
           }
           break;
           case GOALIE:{
@@ -276,6 +299,7 @@ void Intel::loop(){
   }
 }
 
+
 // goalieCost reckons the goal vertical extension not covered by the goalie.
 // This function is used to determine where the goalie must be to cover a larger area of the goal.
 float Intel::goalieCost( const Vec3 ball_pos, const Vec3 goalie_pos ){
@@ -285,9 +309,7 @@ float Intel::goalieCost( const Vec3 ball_pos, const Vec3 goalie_pos ){
   y1 = ball_pos.y - tan(theta+alpha)*(ssl_geometry_.field_length_*0.5f + ball_pos.x);
   y2 = ball_pos.y - tan(theta-alpha)*(ssl_geometry_.field_length_*0.5f + ball_pos.x);
   if (y1<y2){
-    const float aux = y1;
-    y1 = y2;
-    y2 = aux;
+    swap(y1,y2);
   }
   if (y1 > ssl_geometry_.goal_width_*0.5){
     y1 = ssl_geometry_.defense_stretch_*0.5;
