@@ -35,11 +35,10 @@ void Robot::goToAiming (Vec3 const pose, Vec3 const target){
 }
 
 bool Robot::isAiming(const Vec3 target) const {
-  const float angle1 = pose_.w;
-  const float angle2 = util::aim(pose_, target);
-  const float diff = util::wrap(fabs(angle1-angle2));
-  cerr << diff << endl;
-  return diff <= PI/180.0f;
+  const float current_angle = util::wrap(pose_.w);
+  const float aim = util::aim(pose_, target);
+  const float diff = fabs(current_angle-aim);
+  return diff <= PI/180.0f; return diff <= PI/180.0f;
 }
 
 void Robot::setKick(float kick){

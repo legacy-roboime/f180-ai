@@ -3,7 +3,8 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#define TARGET OUR_GOAL
+#include <random>
+#define TARGET RAND_VEC
 using namespace std;
 
 void Intel::geometryInput(){
@@ -60,6 +61,8 @@ void Intel::stateIO(){
 }
 
 void Intel::loop(){
+  char previous_ref_state;
+  float new_target = 0.0f;
   while (true){
     stateIO();
     vector<Robot> our_robots;
@@ -130,6 +133,13 @@ void Intel::loop(){
     }
     cout << state_.counter_ << endl;
     int def_counter = 0;
+    random_device rd;
+    mt19937 mt(rd());
+    uniform_real_distribution<float> rand(-ssl_geometry_.goal_width_*0.5, ssl_geometry_.goal_width_*0.5);
+    if (previous_ref_state != state_.referee_state_){
+      new_target = rand(mt);
+    }
+    const Vec3 RAND_VEC(-ssl_geometry_.field_length_*0.5, new_target, 0.0f);
     for(int i = 0 ; i < our_robots.size(); ++i){
     Robot mr_robot = our_robots.at(i);
     const int robot_id = our_robots.at(i).getId();
@@ -247,6 +257,7 @@ void Intel::loop(){
     }
     mr_robot.getCommand().print();
     }
+    previous_ref_state = state_.referee_state_;
   }
 }
 
