@@ -14,6 +14,13 @@ enum Stance{
   GOALIE
 };
 
+enum Attacker_action{
+  GOING,
+  SETTING,
+  TARGETING,
+  SHOOTING
+};
+
 class Robot{
 public:
   Robot();
@@ -35,6 +42,8 @@ public:
   void setStance( Stance stance );
   void setClosest( bool is_closest );
 
+  void runAttackerAction(const Vec3 ball, const Vec3 target, const Vec3 ball_vel);
+
   void goToAiming( const Vec3 pose, const Vec3 target );
   void rotateAround( const Vec3 center , const Vec3 target);
   void rotateAround( const Vec3 center , const Vec3 target, const Vec3 center_speed );
@@ -42,6 +51,7 @@ public:
   void setDribble( bool dribble );
 private:
   Stance stance_;
+  Attacker_action action_;
   int id_;
   bool is_friend_;
   bool is_closest_;
