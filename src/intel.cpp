@@ -170,9 +170,9 @@ void Intel::loop(){
                   }
                 }
                 if(fabs(closest_robot.x-ball_.pose_.x) < EPS) y=mr_robot.getPose().y;
-                else y=closest_robot.y-(closest_robot.y-ball_.pose_.y)*(closest_robot.x+ssl_geometry_.field_length_/2)/(closest_robot.x-ball_.pose_.x);
-                y = util::clamp(y,-ssl_geometry_.goal_width_/2, ssl_geometry_.goal_width_/2);
-                mr_robot.goToAiming( Vec3(-ssl_geometry_.field_length_/2+0.1,y,0), ball_.pose_ );
+                else y=closest_robot.y-(closest_robot.y-ball_.pose_.y)*(closest_robot.x+ssl_geometry_.field_length/2)/(closest_robot.x-ball_.pose_.x);
+                y = util::clamp(y,-ssl_geometry_.goal_width/2, ssl_geometry_.goal_width/2);
+                mr_robot.goToAiming( Vec3(-ssl_geometry_.field_length/2+0.1,y,0), Vec3() );
               break;
               }
             }
@@ -212,9 +212,9 @@ void Intel::loop(){
                   }
                 }
                 if(fabs(closest_robot.x-ball_.pose_.x) < EPS) y=mr_robot.getPose().y;
-                else y=closest_robot.y-(closest_robot.y-ball_.pose_.y)*(closest_robot.x+ssl_geometry_.field_length_/2)/(closest_robot.x-ball_.pose_.x);
-                y = util::clamp(y,-ssl_geometry_.goal_width_/2, ssl_geometry_.goal_width_/2);
-                mr_robot.goToAiming( Vec3(-ssl_geometry_.field_length_/2+0.1,y,0), ball_.pose_ );
+                else y=closest_robot.y-(closest_robot.y-ball_.pose_.y)*(closest_robot.x+ssl_geometry_.field_length/2)/(closest_robot.x-ball_.pose_.x);
+                y = util::clamp(y,-ssl_geometry_.goal_width/2, ssl_geometry_.goal_width/2);
+                mr_robot.goToAiming( Vec3(-ssl_geometry_.field_length/2+0.1,y,0), Vec3() );
               }
               break;
             }
@@ -248,9 +248,9 @@ void Intel::loop(){
                   }
                 }
                 if(fabs(closest_robot.x-ball_.pose_.x) < EPS) y=mr_robot.getPose().y;
-                else y=closest_robot.y-(closest_robot.y-ball_.pose_.y)*(closest_robot.x+ssl_geometry_.field_length_/2)/(closest_robot.x-ball_.pose_.x);
-                y = util::clamp(y,-ssl_geometry_.goal_width_/2, ssl_geometry_.goal_width_/2);
-                mr_robot.goToAiming( Vec3(-ssl_geometry_.field_length_/2+0.1,y,0), ball_.pose_ );
+                else y=closest_robot.y-(closest_robot.y-ball_.pose_.y)*(closest_robot.x+ssl_geometry_.field_length/2)/(closest_robot.x-ball_.pose_.x);
+                y = util::clamp(y,-ssl_geometry_.goal_width/2, ssl_geometry_.goal_width/2);
+                mr_robot.goToAiming( Vec3(-ssl_geometry_.field_length/2+0.1,y,0), Vec3() );
               }
               break;
             }
@@ -283,9 +283,9 @@ void Intel::loop(){
                   }
                 }
                 if(fabs(closest_robot.x-ball_.pose_.x) < EPS) y=mr_robot.getPose().y;
-                else y=closest_robot.y-(closest_robot.y-ball_.pose_.y)*(closest_robot.x+ssl_geometry_.field_length_/2)/(closest_robot.x-ball_.pose_.x);
-                y = util::clamp(y,-ssl_geometry_.goal_width_/2, ssl_geometry_.goal_width_/2);
-                mr_robot.goToAiming( Vec3(-ssl_geometry_.field_length_/2+0.1,y,0), ball_.pose_ );
+                else y=closest_robot.y-(closest_robot.y-ball_.pose_.y)*(closest_robot.x+ssl_geometry_.field_length/2)/(closest_robot.x-ball_.pose_.x);
+                y = util::clamp(y,-ssl_geometry_.goal_width/2, ssl_geometry_.goal_width/2);
+                mr_robot.goToAiming( Vec3(-ssl_geometry_.field_length/2+0.1,y,0), ball_.pose_ );
               }
               break;
             }
