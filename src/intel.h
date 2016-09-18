@@ -26,11 +26,17 @@ public:
 
   Geometry getGeometry() const { return ssl_geometry_; }
   State getState() const { return state_; }
+  void setTestGoalie(bool b) { test_goalie_ = b; }
+  void setTestAttacker(bool b) { test_attacker_ = b; }
+  bool getTestGoalie() { return test_goalie_; }
+  bool getTestAttacker() { return test_attacker_; }
 private:
   Geometry ssl_geometry_;
   State state_;
   Ball ball_;
   float d_t;
+  bool test_goalie_;
+  bool test_attacker_;
 };
 
 // Important spots in the field further defined once we get the

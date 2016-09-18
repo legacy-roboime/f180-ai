@@ -2,18 +2,18 @@ MAIN = nu-intel
 CLIFLAGS = ./$(MAIN)
 #GUIFLAGS for real robots
 #GUIFLAGS = --blue=./$(MAIN) -vvpl --real
-GUIFLAGS = --blue=./$(MAIN) --yellow=./demo -vvf
-CXX = clang++-3.5 -std=c++11
-#CXX = clang++ -std=c++11
-#CXX = g++ -std=c++11
-SRC := $(shell find -name '*.cpp')
+#GUIFLAGS = --blue=./$(MAIN) --yellow=./demo -vvf
+GUIFLAGS = --blue "./$(MAIN) -g" --yellow "./$(MAIN) -a" -k -vv -ff
+CXX = clang++
+CXXFLAGS = -std=c++11
+SRC := $(shell find . -name '*.cpp')
 VPATH = amb
 
 *.o: $(SRC)
-	$(CXX) -c $(SRC)
+	$(CXX) $(CXXFLAGS) -c $(SRC)
 
 $(MAIN): *.o
-	$(CXX) *.o -o $(MAIN)
+	$(CXX) $(CXXFLAGS) *.o -o $(MAIN)
 
 gui: $(MAIN)
 	roboime-next-gui $(GUIFLAGS)

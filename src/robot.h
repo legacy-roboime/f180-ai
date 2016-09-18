@@ -11,7 +11,8 @@
 enum Stance{
   ATTACKER,
   DEFENDER,
-  GOALIE
+  GOALIE,
+  GOAWAY
 };
 
 enum Attacker_action{
