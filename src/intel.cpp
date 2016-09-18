@@ -181,8 +181,7 @@ void Intel::loop(){
                 float min_dist = 1e20;
                 Vec3 closest_robot;
                 float y;
-                for( auto aux_robot : our_robots) {
-                  if(aux_robot.getStance() == GOALIE) continue;
+                for( auto aux_robot : their_robots) {
                   if(aux_robot.getPose().dist(ball_.pose_) < min_dist) {
                     closest_robot = aux_robot.getPose();
                     min_dist=aux_robot.getPose().dist(ball_.pose_);
@@ -225,8 +224,7 @@ void Intel::loop(){
                 float min_dist = 1e20;
                 Vec3 closest_robot;
                 float y;
-                for( auto aux_robot : our_robots) {
-                  if(aux_robot.getStance() == GOALIE) continue;
+                for( auto aux_robot : their_robots) {
                   if(aux_robot.getPose().dist(ball_.pose_) < min_dist) {
                     closest_robot = aux_robot.getPose();
                     min_dist=aux_robot.getPose().dist(ball_.pose_);
@@ -266,8 +264,7 @@ void Intel::loop(){
                 float min_dist = 1e20;
                 Vec3 closest_robot;
                 float y;
-                for( auto aux_robot : our_robots) {
-                  if(aux_robot.getStance() == GOALIE) continue;
+                for( auto aux_robot : their_robots) {
                   if(aux_robot.getPose().dist(ball_.pose_) < min_dist) {
                     closest_robot = aux_robot.getPose();
                     min_dist=aux_robot.getPose().dist(ball_.pose_);
@@ -303,8 +300,7 @@ void Intel::loop(){
                 float min_dist = 1e20;
                 Vec3 closest_robot;
                 float y;
-                for( auto aux_robot : our_robots) {
-                  if(aux_robot.getStance() == GOALIE) continue;
+                for( auto aux_robot : their_robots) {
                   if(aux_robot.getPose().dist(ball_.pose_) < min_dist) {
                     closest_robot = aux_robot.getPose();
                     min_dist=aux_robot.getPose().dist(ball_.pose_);
