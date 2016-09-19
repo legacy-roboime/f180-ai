@@ -1,6 +1,7 @@
 #pragma once
 #include "env/vec3.h"
 #include "ctrl/pid.h"
+#include "ctrl/pidrot.h"
 #include "ctrl/command.h"
 #include "intel.h"
 
@@ -46,8 +47,9 @@ public:
   void runAttackerAction(const Vec3 ball, const Vec3 target, const Vec3 ball_vel);
 
   void goToAiming( const Vec3 pose, const Vec3 target );
-  void rotateAround( const Vec3 center , const Vec3 target);
+  void rotateAround( const Vec3 center , const Vec3 target, const float radius);
   void rotateAround( const Vec3 center , const Vec3 target, const Vec3 center_speed );
+  void rotateAround( const Vec3 center , const Vec3 target, const Vec3 center_speed , const float radius);
   void setKick( float kick );
   void setDribble( bool dribble );
 private:
