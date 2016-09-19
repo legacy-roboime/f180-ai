@@ -33,3 +33,9 @@ Vec3 Vec3::displaced(const float angle) const {
   return Vec3(radius*cos(angle+theta), radius*sin(angle+theta), w);
 }
 
+float Vec3::aim(const Vec3 target) {
+  const float x = target.x - this->x;
+  const float y = target.y - this->y;
+  return atan2(y,x);
+}
+
