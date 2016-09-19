@@ -15,7 +15,7 @@ float util::deg(const float ang) {
 }
 
 float util::wrap(const float ang) {
-  return (fmod(ang + 5 * PI, 2 * PI) - PI);
+  return remainder(ang, 2*PI);
 }
 
 float util::dist(const Vec3 pose1, const Vec3 pose2) {
