@@ -33,7 +33,7 @@ void PIDRot::calcProportional(const Vec3 pose_now, const Vec3 center, const floa
   cmd_-> vt_ = vt_;
   cmd_-> vn_ = vn_;
   cmd_-> vw_ = vw_;
-  cerr << vr << ' ' << vt << ' ' << vw_ << endl;
+  //cerr << vr << ' ' << vt << ' ' << vw_ << endl;
 }
 
 void PIDRot::setCommandPtr(Command& cmd){
