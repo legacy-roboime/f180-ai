@@ -44,5 +44,7 @@ struct Vec3{
   Vec3 displaced(const float angle) const ;
   ///Returns corresponding unit vector
   Vec3 normalized() const ;
+  ///Returns angle of vector aiming target
+  float aim(const Vec3 target) const;
 };
 
