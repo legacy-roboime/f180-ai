@@ -1,5 +1,7 @@
 #pragma once
 #include "env/vec3.h"
+#include "env/ball.h"
+#include "env/ssl_geometry.h"
 #include "ctrl/pid.h"
 #include "ctrl/pidrot.h"
 #include "ctrl/command.h"
@@ -45,6 +47,7 @@ public:
   void setClosest( bool is_closest );
 
   void runAttackerAction(const Vec3 ball, const Vec3 target, const Vec3 ball_vel);
+  void runDefenderAction(const Ball ball, const Vec3 goalie_spot, const Geometry& ssl_geometry, const int counter);
 
   void goToAiming( const Vec3 pose, const Vec3 target );
   void rotateAround( const Vec3 center , const Vec3 target, const float radius);

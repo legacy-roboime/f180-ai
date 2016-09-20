@@ -131,7 +131,6 @@ void Intel::loop(){
         if (i == 0) {
             our_robots.at(i).setStance(ATTACKER);
             our_robots.at(i).setClosest(true);
-            best_y = this->attackerBestY(ball_.pose_, ssl_geometry_.field_length*0.5, their_robots, -1);
         } else {
             our_robots.at(i).setStance(GOAWAY);
         }
@@ -163,6 +162,7 @@ void Intel::loop(){
         }
       }
     }
+    best_y = this->attackerBestY(ball_.pose_, ssl_geometry_.field_length*0.5, their_robots, -1);
     cout << state_.counter << endl;
     int def_counter = 0;
     random_device rd;
@@ -179,17 +179,13 @@ void Intel::loop(){
           case 'N':{
             switch(mr_robot.getStance()){
               case ATTACKER:{
-                cerr << best_y << endl;
                 const Vec3 GAP_VEC(ssl_geometry_.field_length*0.5, best_y, 0.0f );
                 mr_robot.runAttackerAction(ball_.pose_, GAP_VEC, ball_.vel_);
               }
               break;
               case DEFENDER:{
-                const float ball_angle = util::aim(OUR_GOAL, ball_.pose_ );
-                if( def_counter == 0 ) mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch/2+ssl_geometry_.defense_radius, ball_angle,ball_angle), Vec3(0,0,ball_angle) );
-                else if (def_counter == 1) mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch/2+ssl_geometry_.defense_radius, ball_angle + (10.0f*PI/180) , ball_angle ), Vec3(0,0,ball_angle) );
-                else mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch/2+ssl_geometry_.defense_radius, ball_angle - (10.0f*PI/180) , ball_angle ), Vec3(0,0,ball_angle) );
-                def_counter ++;
+                mr_robot.runDefenderAction(ball_, OUR_GOAL, ssl_geometry_, def_counter);
+                def_counter++;
               }
               break;
               case GOALIE:{
@@ -230,10 +226,7 @@ void Intel::loop(){
                 mr_robot.goToAiming(mr_robot.getPose(), Vec3 ( 0.0f, 0.0f , 0.0f ));
               } break;
               case DEFENDER:{
-                const float ball_angle = util::aim(OUR_GOAL, ball_.pose_ );
-                if( def_counter == 0 ) mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch/2+ssl_geometry_.defense_radius, ball_angle,ball_angle), Vec3(0,0,ball_angle) );
-                else if (def_counter == 1) mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch/2+ssl_geometry_.defense_radius, ball_angle + (10.0f*PI/180) , ball_angle ), Vec3(0,0,ball_angle) );
-                else mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch/2+ssl_geometry_.defense_radius, ball_angle - (10.0f*PI/180) , ball_angle ), Vec3(0,0,ball_angle) );
+                mr_robot.runDefenderAction(ball_, OUR_GOAL, ssl_geometry_, def_counter);
                 def_counter ++;
               } break;
               case GOALIE:{
@@ -274,10 +267,7 @@ void Intel::loop(){
               }
               break;
               case DEFENDER:{
-                const float ball_angle = util::aim(OUR_GOAL, ball_.pose_ );
-                if( def_counter == 0 ) mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch/2+ssl_geometry_.defense_radius, ball_angle,ball_angle), Vec3(0,0,ball_angle) );
-                else if (def_counter == 1) mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch/2+ssl_geometry_.defense_radius, ball_angle + (10.0f*PI/180) , ball_angle ), Vec3(0,0,ball_angle) );
-                else mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch/2+ssl_geometry_.defense_radius, ball_angle - (10.0f*PI/180) , ball_angle ), Vec3(0,0,ball_angle) );
+                mr_robot.runDefenderAction(ball_, OUR_GOAL, ssl_geometry_, def_counter);
                 def_counter ++;
               }
               break;
@@ -310,11 +300,8 @@ void Intel::loop(){
               }
               break;
               case DEFENDER:{
-                const float ball_angle = util::aim(OUR_GOAL, ball_.pose_ );
-                if( def_counter == 0 ) mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch/2+ssl_geometry_.defense_radius, ball_angle,ball_angle), Vec3(0,0,ball_angle) );
-                else if (def_counter == 1) mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch/2+ssl_geometry_.defense_radius, ball_angle + (10.0f*PI/180) , ball_angle ), Vec3(0,0,ball_angle) );
-                else mr_robot.goToAiming( OUR_GOAL+util::rec(.09+ssl_geometry_.defense_stretch/2+ssl_geometry_.defense_radius, ball_angle - (10.0f*PI/180) , ball_angle ), Vec3(0,0,ball_angle) );
                 def_counter ++;
+                mr_robot.runDefenderAction(ball_, OUR_GOAL, ssl_geometry_, def_counter);
               }
               break;
               case GOALIE:{
@@ -482,4 +469,3 @@ float Intel::attackerBestY( const Vec3 ball_pos, const float goal_x, vector<Robo
 #endif
   return final_result;
 }
-

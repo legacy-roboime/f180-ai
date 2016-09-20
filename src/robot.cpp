@@ -79,3 +79,13 @@ void Robot::runAttackerAction(const Vec3 ball_pos, const Vec3 target, const Vec3
   }
 }
 
+void Robot::runDefenderAction(const Ball ball, const Vec3 goalie_spot, const Geometry& ssl_geometry, const int def_counter){
+  const float ball_angle = util::aim(goalie_spot , ball.pose_ );
+  if( def_counter == 0 ) {
+    this->goToAiming( goalie_spot+util::rec(.09+ssl_geometry.defense_stretch/2+ssl_geometry.defense_radius, ball_angle,ball_angle), Vec3(0,0,ball_angle) );
+  } else if (def_counter == 1){
+    this->goToAiming( goalie_spot+util::rec(.09+ssl_geometry.defense_stretch/2+ssl_geometry.defense_radius, ball_angle + (10.0f*PI/180) , ball_angle ), Vec3(0,0,ball_angle) );
+  } else {
+  this->goToAiming( goalie_spot+util::rec(.09+ssl_geometry.defense_stretch/2+ssl_geometry.defense_radius, ball_angle - (10.0f*PI/180) , ball_angle ), Vec3(0,0,ball_angle) );
+  }
+}
