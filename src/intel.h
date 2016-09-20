@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+#include <vector>
 #include "robot.h"
 #include "env/ssl_geometry.h"
 #include "env/state.h"
@@ -12,6 +14,8 @@
 //! and the software project roboime-next and define how is the world and how our
 //! robots may behave in it.
 
+class Robot;
+
 class Intel{
 public:
   Intel() = default;
@@ -23,13 +27,16 @@ public:
 
   float goalieCost( const Vec3 ball_pos, const Vec3 goalie_pos );
   Vec3 calcMinCost ( const Vec3 ball_pos );
+  float attackerBestY( const Vec3 ball_pos, const float goal_x, std::vector<Robot> robots, const int atk_id );
 
   Geometry getGeometry() const { return ssl_geometry_; }
   State getState() const { return state_; }
+
   void setTestGoalie(bool b) { test_goalie_ = b; }
   void setTestAttacker(bool b) { test_attacker_ = b; }
   bool getTestGoalie() { return test_goalie_; }
   bool getTestAttacker() { return test_attacker_; }
+
 private:
   Geometry ssl_geometry_;
   State state_;
