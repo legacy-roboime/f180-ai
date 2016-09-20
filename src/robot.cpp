@@ -38,7 +38,7 @@ bool Robot::isAiming(const Vec3 target) const {
   const float current_angle = util::wrap(pose_.w);
   const float aim = util::aim(pose_, target);
   const float diff = fabs(current_angle-aim);
-  return diff <= PI/180.0f; return diff <= PI/180.0f;
+  return diff <= PI/180.0f;
 }
 
 void Robot::setKick(float kick){
