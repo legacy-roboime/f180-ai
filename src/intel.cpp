@@ -7,6 +7,7 @@
 #include <random>
 #include "env/segment.h"
 #define TARGET RAND_VEC
+#define ATK_THR 6
 using namespace std;
 
 bool cmp_segments(const Segment s1, const Segment s2){
@@ -162,7 +163,12 @@ void Intel::loop(){
         }
       }
     }
-    best_y = this->attackerBestY(ball_.pose_, ssl_geometry_.field_length*0.5, their_robots, -1);
+    static float d_t = 0;
+    if (state_.timestamp - d_t > ATK_THR){
+      best_y = this->attackerBestY(ball_.pose_, ssl_geometry_.field_length*0.5, their_robots, -1);
+      d_t = state_.timestamp;
+      cerr << best_y << endl;
+    }
     cout << state_.counter << endl;
     int def_counter = 0;
     random_device rd;
